@@ -86,31 +86,45 @@ class SyncService {
 
     try {
       final db = await DatabaseHelper.getDatabase();
-      final entries = await db.query('sync_queue', orderBy: 'id');
 
-      for (final entry in latestEntryPerRow(entries)) {
-        final table = entry['table_name'] as String;
-        final rowId = entry['row_id'] as String;
-
-        // Send the row as it is now, so the latest change is sent.
-        final rows = await db.query(table, where: 'id = ?', whereArgs: [rowId]);
-        if (rows.isNotEmpty) {
-          await FirebaseFirestore.instance
-              .collection(table)
-              .doc(rowId)
-              .set(rows.first)
-              .timeout(_pushTimeout);
+      // Rows saved while we are sending (for example the shares of an
+      // expense, right after the expense) are added to the queue but their
+      // own push returns early because _isPushing is true. So we read the
+      // queue again and keep going until it is empty.
+      while (true) {
+        final entries = await db.query('sync_queue', orderBy: 'id');
+        if (entries.isEmpty) {
+          break;
         }
 
-        // The change is on the server now, so remove it from the queue.
-        // This removes the older entries of the same row too, but not the
-        // ones added while we were sending (they have a higher id).
-        // sync_queue is the only table where rows are really deleted.
-        await db.delete(
-          'sync_queue',
-          where: 'table_name = ? AND row_id = ? AND id <= ?',
-          whereArgs: [table, rowId, entry['id']],
-        );
+        for (final entry in latestEntryPerRow(entries)) {
+          final table = entry['table_name'] as String;
+          final rowId = entry['row_id'] as String;
+
+          // Send the row as it is now, so the latest change is sent.
+          final rows = await db.query(
+            table,
+            where: 'id = ?',
+            whereArgs: [rowId],
+          );
+          if (rows.isNotEmpty) {
+            await FirebaseFirestore.instance
+                .collection(table)
+                .doc(rowId)
+                .set(rows.first)
+                .timeout(_pushTimeout);
+          }
+
+          // The change is on the server now, so remove it from the queue.
+          // This removes the older entries of the same row too, but not the
+          // ones added while we were sending (they have a higher id).
+          // sync_queue is the only table where rows are really deleted.
+          await db.delete(
+            'sync_queue',
+            where: 'table_name = ? AND row_id = ? AND id <= ?',
+            whereArgs: [table, rowId, entry['id']],
+          );
+        }
       }
     } finally {
       _isPushing = false;

@@ -13,6 +13,14 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Splitting, balances and expense service (Enes Çelik)
+
+- `lib/utils/split_calculator.dart`: equal and percentage splits in kuruş. The leftover kuruş go to the payer, so the shares always add up to the total (100 TL / 3 = 33.34 + 33.33 + 33.33). Checks for "percentages add up to 100" and "exact amounts add up to the total".
+- `lib/utils/balance_calculator.dart`: balance of each member = what they paid − their shares. Positive means the others owe them.
+- `ExpenseService` (`lib/services/expense_service.dart`): add an expense with its shares, read the expenses and shares of a group, and soft-delete an expense with its shares. Everything is saved with `SyncService.saveRow`.
+- `SyncService.pushPending` now reads the queue again until it is empty. Before, rows saved while a push was running (the shares saved right after their expense) stayed in the queue until the next full sync.
+- Tests: equal and percentage splits, leftover kuruş, the checks, and balances.
+
 ## 2026-11-15 — Expense tables and models (Enes Çelik)
 
 - Database version 3: new tables `expenses`, `expense_items`, `expense_shares` and `settlements`. Old databases get them through `onUpgrade`.
