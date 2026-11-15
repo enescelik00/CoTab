@@ -103,7 +103,7 @@ We use a simple branch-and-pull-request workflow:
 - Run `flutter analyze` and `flutter test` before opening a pull request.
 - Tasks are tracked in GitHub Issues.
 
-Project documents, including the [roadmap](docs/Road_Map.md), are in the [docs/](docs/) folder.
+Project documents, including the [roadmap](docs/Road_Map.md) and the [team notes](docs/Ekip_Notlari.md), are in the [docs/](docs/) folder.
 
 ---
 

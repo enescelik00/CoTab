@@ -13,6 +13,11 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Team notes (Ahmet Anıl Çay)
+
+- Added `docs/Ekip_Notlari.md` (Turkish) with the setup steps teammates need: Flutter and Java versions, Kotlin upgrade, Firebase configuration.
+- Documented the data and sync rules: SQLite as the source of truth, `SyncService.saveRow`, sync columns, and database version ownership.
+
 ## 2026-11-15 — Offline sync (Ahmet Anıl Çay)
 
 - New table `sync_queue` (id, table_name, row_id, created_at): the local changes that still have to be sent to Firestore. It is added in the same database version 2 step as `group_members`, because version 2 was not released yet. It is the only table without `updated_at`/`deleted_at`, and its rows are really deleted once sent.
