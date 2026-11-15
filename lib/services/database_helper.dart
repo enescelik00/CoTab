@@ -54,7 +54,7 @@ class DatabaseHelper {
       )
     ''');
 
-    await _createGroupMembersTable(db);
+    await _createVersion2Tables(db);
   }
 
   // Runs when the app finds a database file from an older app version.
@@ -65,14 +65,15 @@ class DatabaseHelper {
     int newVersion,
   ) async {
     if (oldVersion < 2) {
-      await _createGroupMembersTable(db);
+      await _createVersion2Tables(db);
     }
     // Next version goes here: if (oldVersion < 3) { ... }
   }
 
-  // Added in version 2. The id is '${groupId}_${userId}', so the same
-  // membership always gets the same id on every phone.
-  static Future<void> _createGroupMembersTable(Database db) async {
+  // Added in version 2: group_members and sync_queue.
+  static Future<void> _createVersion2Tables(Database db) async {
+    // The id is '${groupId}_${userId}', so the same membership always gets
+    // the same id on every phone.
     await db.execute('''
       CREATE TABLE group_members (
         id TEXT PRIMARY KEY,
@@ -82,6 +83,19 @@ class DatabaseHelper {
         joined_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
         deleted_at INTEGER
+      )
+    ''');
+
+    // The list of local changes that still have to be sent to Firestore
+    // (see SyncService). It only lives on this phone and is never synced.
+    // It is the one table without updated_at and deleted_at: a row is
+    // really DELETEd once its change has reached the server.
+    await db.execute('''
+      CREATE TABLE sync_queue (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        table_name TEXT NOT NULL,
+        row_id TEXT NOT NULL,
+        created_at INTEGER NOT NULL
       )
     ''');
   }
