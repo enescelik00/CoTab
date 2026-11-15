@@ -13,6 +13,18 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Groups and invite codes (Ahmet Anıl Çay)
+
+- Database version 2: new `group_members` table (id = `groupId_userId`, group_id, user_id, role, joined_at, updated_at, deleted_at). Old databases get it through `onUpgrade`. The next table change should be version 3; see the comment in `_upgradeTables` in `database_helper.dart`.
+- Added the `Group` and `GroupMember` models.
+- `GroupService` (`lib/services/group_service.dart`): create a group, join with an invite code, read my groups and the members of a group from SQLite, and download them from Firestore (`groups`, `group_members`, `users`). The newer `updated_at` wins when saving downloaded rows.
+- Creating and joining need internet, because the invite code is checked on the server. They write to Firestore and to SQLite.
+- Invite codes are 6 characters without look-alike characters such as 0/O and 1/I (`lib/utils/invite_code.dart`). The creator of a group is its admin.
+- Home screen lists my groups (pull to refresh), with a "New group" button and a "Join a group" button.
+- New screens: create group (name, home or trip), join group (invite code) and group detail (invite code with a copy button, members, a placeholder for expenses).
+- Added English and Turkish texts for the new screens.
+- Tests: `Group`/`GroupMember` map round trips, the invite code generator and the create/join form validation. `HomeScreen` takes an optional `groupLoader` so its test does not need SQLite or Firebase.
+
 ## 2026-11-15 — Sign up and sign in (Ahmet Anıl Çay)
 
 - Added the sign-in and sign-up screens with form validation, a loading state and error messages in a SnackBar.
