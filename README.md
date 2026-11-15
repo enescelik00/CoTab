@@ -19,6 +19,7 @@ CoTab is a mobile app for student houses and travel groups. It brings shared spe
 
 ### Extended
 - [ ] **Receipt scanning (OCR):** read the date, total and VAT from Turkish market receipts, then review and correct before saving
+  - [x] Initial trial: take or choose a receipt photo, preview it, and display raw OCR text in image reading order
 - [ ] **Item-level splitting:** assign each item on a receipt to one or more people
 - [ ] **QR invites:** join a group by scanning a QR code
 - [ ] **Debt simplification:** settle up with the minimum number of payments
@@ -44,7 +45,7 @@ The app is built in English with Turkish language support.
 | Navigation | Navigator |
 | Local storage | SQLite via sqflite (plain SQL) |
 | Backend | Firebase Authentication, Cloud Firestore |
-| Receipt scanning | Google ML Kit Text Recognition (on-device) |
+| Receipt scanning | image_picker (camera/gallery) and Google ML Kit Text Recognition (on-device) |
 | Notifications | Local notifications (flutter_local_notifications) |
 | Languages | English (default) and Turkish, via Flutter's built-in localization |
 
@@ -89,6 +90,8 @@ This creates `android/app/google-services.json` and `lib/firebase_options.dart`.
 ```bash
 flutter run
 ```
+
+To try the receipt OCR prototype, open a group and tap the receipt scan icon. Take a photo or choose one from the device gallery, then tap **Read text**. This shows raw text only; receipt fields are not parsed, reviewed or saved as an expense yet. Text was seen in one real-device receipt trial, but recognition accuracy still needs testing with more receipts.
 
 ---
 

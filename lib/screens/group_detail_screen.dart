@@ -12,6 +12,7 @@ import '../utils/balance_calculator.dart';
 import '../widgets/expense_tile.dart';
 import '../widgets/member_balance_tile.dart';
 import 'add_expense_screen.dart';
+import 'receipt_camera_screen.dart';
 
 // Shows one group: its invite code, its members with their balances and
 // its expenses. New expenses are added with the button at the bottom.
@@ -154,7 +155,21 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.group.name)),
+      appBar: AppBar(
+        title: Text(widget.group.name),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ReceiptCameraScreen(),
+              ),
+            ),
+            icon: const Icon(Icons.document_scanner_outlined),
+            tooltip: texts.scanReceiptTitle,
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         // Disabled until the members are loaded.
         onPressed: _members.isEmpty ? null : _openAddExpense,

@@ -31,6 +31,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>CoTab needs the camera to photograph a receipt for text recognition.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>CoTab uses receipt photos for text recognition.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

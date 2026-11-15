@@ -289,6 +289,61 @@ class AppLocalizationsTr extends AppLocalizations {
   String get expenseDeleted => 'Harcama silindi.';
 
   @override
+  String get scanReceiptTitle => 'Fiş tara';
+
+  @override
+  String get receiptCameraHint =>
+      'Fişin fotoğrafını çek veya galeriden seçip metnini okumayı dene.';
+
+  @override
+  String get receiptTakePhoto => 'Fotoğraf çek';
+
+  @override
+  String get receiptChooseFromGallery => 'Galeriden seç';
+
+  @override
+  String get receiptChooseAnother => 'Başka fotoğraf seç';
+
+  @override
+  String get receiptGalleryPermissionError =>
+      'Fotoğraf izni verilmedi. Cihaz ayarlarından izin verip tekrar dene.';
+
+  @override
+  String get receiptGalleryUnavailable =>
+      'Fotoğraf galerisi açılamadı. Lütfen tekrar dene.';
+
+  @override
+  String get receiptCameraPermissionError =>
+      'Kamera izni verilmedi. Cihaz ayarlarından izin verip tekrar dene.';
+
+  @override
+  String get receiptCameraUnavailable =>
+      'Kamera açılamadı. Cihazın kamerasını kontrol edip tekrar dene.';
+
+  @override
+  String get receiptPreviewTitle => 'Fiş fotoğrafı';
+
+  @override
+  String get receiptImageError =>
+      'Fotoğraf gösterilemedi. Lütfen başka bir fotoğraf seç veya yeniden çek.';
+
+  @override
+  String get receiptRetake => 'Yeniden çek';
+
+  @override
+  String get receiptReadText => 'Metni oku';
+
+  @override
+  String get receiptOcrError => 'Fiş metni okunamadı. Lütfen tekrar dene.';
+
+  @override
+  String get receiptRecognizedText => 'Okunan metin';
+
+  @override
+  String get receiptNoText =>
+      'Metin bulunamadı. Daha net bir fotoğrafla tekrar dene.';
+
+  @override
   String get offlineShowingSavedData =>
       'Çevrimdışısın — kayıtlı veriler gösteriliyor';
 }

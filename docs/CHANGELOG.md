@@ -13,6 +13,23 @@ Entry format:
 
 ---
 
+## 2026-11-16 — Document receipt OCR prototype (Enes Yahya Bodur)
+
+- Updated the roadmap to show the camera, gallery and raw OCR trial as implemented while keeping receipt parsing and device accuracy checks pending.
+- Updated the README with the prototype's current scope and how to try it.
+
+## 2026-11-15 — Gallery input and OCR reading order (Enes Yahya Bodur)
+
+- Added gallery photo selection alongside camera capture, using the existing preview and raw OCR flow.
+- Added English and Turkish gallery error messages and widget tests.
+- Display OCR lines by their position on the receipt (top to bottom, then left to right on each row) so raw text is easier to inspect. This does not parse receipt fields.
+
+## 2026-11-15 — Receipt camera and raw OCR trial (Enes Yahya Bodur)
+
+- Added a receipt camera entry on the group screen, photo preview and retake, and on-device ML Kit text recognition.
+- Added English and Turkish messages for camera and OCR errors, plus tests for basic failure cases.
+- Receipt parsing and expense saving remain for the next phase.
+
 ## 2026-11-15 — Roadmap and README update (Enes Çelik)
 
 - Roadmap: marked the finished Phase 0 and Phase 1 items (Firebase, sign in, groups, sync, expenses, splitting, balances, theme and dark mode). Gate 1 still needs the test on two devices.

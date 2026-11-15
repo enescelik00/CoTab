@@ -1,6 +1,6 @@
 # CoTab — Yol Haritası
 
-Son güncelleme: 15 Kasım 2026 · Enes Çelik
+Son güncelleme: 16 Kasım 2026 · Enes Yahya Bodur
 
 ## Özet ve takvim
 
@@ -49,12 +49,12 @@ Kod öğrenci seviyesinde ve sade tutulur: ek mimari katmanı, kod üretimi gere
 | Navigasyon | Navigator.push | Flutter'ın kendi yöntemi |
 | Yerel veritabanı | sqflite + path, düz SQL | DatabaseHelper sınıfı lib/services altında |
 | Uzak sunucu | firebase\_auth, cloud\_firestore | Eklendi (Ahmet Anıl Çay); senkron SyncService ile |
-| Fiş okuma | google\_mlkit\_text\_recognition | Faz 2'de eklenecek |
-| Kamera | image\_picker | Faz 1'de ham metin denemesi için |
+| Fiş okuma | google\_mlkit\_text\_recognition | Faz 1'de ham metin denemesi eklendi; fiş alanlarını ayrıştırma Faz 2'de |
+| Kamera ve galeri | image\_picker | Faz 1'de fotoğraf çekme/seçme ve önizleme eklendi |
 | Bildirim | flutter\_local\_notifications | Nöbet hatırlatmaları, Faz 2 |
 | QR ile davet | qr\_flutter (üretme) + mobile\_scanner (okuma) | Faz 2'de eklenecek |
 | Dil desteği | flutter\_localizations + intl, ARB dosyaları | İngilizce varsayılan, Türkçe ikinci dil |
-| Test | flutter\_test | Modeller, bölüştürme, bakiye, para biçimi, senkron kuralları, form ekranları ve tema için birim ve widget testleri |
+| Test | flutter\_test | Modeller, bölüştürme, bakiye, para biçimi, senkron kuralları, form ekranları, tema ve fiş tarama hata durumları için testler |
 
 Kural: yukarıdakiler dışında paket eklemeden önce ekipte konuşulur. Klasör yapısı: lib/models, lib/screens, lib/services, lib/widgets, lib/utils. Kurallar depodaki CLAUDE.md'de, değişiklikler CHANGELOG'da.
 
@@ -125,7 +125,7 @@ Beş faz ve üç kapı var: çekirdek sürüm (22 Kasım), özellik dondurma (25
 - [x] Harcama ekleme, eşit/yüzde/tutar bölüştürme, harcama listesi ve silme, kişi bakiyeleri (Enes Çelik)
 - [x] Kayıt ve giriş, Firestore'a offline-first senkron (Ahmet Anıl Çay)
 - [x] Uygulama teması, logo ve açık/koyu mod (Enes Çelik)
-- [ ] Kamera ekranı ve ML Kit ile ham metin çıkarma denemesi (Enes Yahya Bodur)
+- [x] Kamera/galeriden fiş fotoğrafı seçme, önizleme ve ML Kit ile ham metin çıkarma denemesi (Enes Yahya Bodur; gerçek fişte metin görüldü, doğruluk ölçümü bekliyor)
 - [ ] enes branch'inin PR ile main'e alınması (Enes Çelik; inceleme: Ahmet Anıl Çay veya Enes Yahya Bodur)
 - [ ] **İlk tur sunumu (8. hafta, 16–20 Kasım):** amaç, kapsam, ekip, iş planı ve o ana kadarki ekran görüntüleri
 - [ ] **Kapı 1 (22 Kasım):** iki gerçek telefonda aynı grubu gören, harcama ekleyip bakiye hesaplayan çekirdek sürüm. Kod hazır; iki cihazla test bekliyor
@@ -242,5 +242,6 @@ Vize döneminde tamamlananlar: kapsam dokümanı hocaya gönderildi, iskelet mai
 - [ ] İlk tur sunumu slaytları: problem, çözüm, Splitwise'tan farkı, kapsam, ekip, iş planı, ekran görüntüleri (herkes)
 - [ ] Enes Yahya'nın collaborator olduğunu ve main'in korumada olduğunu kontrol et (Enes Çelik)
 - [ ] GitHub Projects panosunu aç, Faz 2 görevlerini Issue olarak gir (Enes Çelik)
-- [ ] Kamera ekranı ve ML Kit ile ham metin denemesi; ayrı branch'te PR aç (Enes Yahya Bodur)
+- [x] Kamera ekranı ve ML Kit ile ham metin denemesini ayrı branch'te geliştir (Enes Yahya Bodur)
+- [ ] Fiş tarama branch'i için PR aç ve incelet (Enes Yahya Bodur)
 - [ ] İlk blog/LinkedIn yazısının taslağı (Ahmet Anıl Çay)

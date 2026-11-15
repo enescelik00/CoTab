@@ -620,6 +620,102 @@ abstract class AppLocalizations {
   /// **'Expense deleted.'**
   String get expenseDeleted;
 
+  /// No description provided for @scanReceiptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan receipt'**
+  String get scanReceiptTitle;
+
+  /// No description provided for @receiptCameraHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph a receipt or choose a photo to try reading its text.'**
+  String get receiptCameraHint;
+
+  /// No description provided for @receiptTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get receiptTakePhoto;
+
+  /// No description provided for @receiptChooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get receiptChooseFromGallery;
+
+  /// No description provided for @receiptChooseAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another photo'**
+  String get receiptChooseAnother;
+
+  /// No description provided for @receiptGalleryPermissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo access is denied. Allow it in your device settings and try again.'**
+  String get receiptGalleryPermissionError;
+
+  /// No description provided for @receiptGalleryUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo library could not be opened. Please try again.'**
+  String get receiptGalleryUnavailable;
+
+  /// No description provided for @receiptCameraPermissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is denied. Allow it in your device settings and try again.'**
+  String get receiptCameraPermissionError;
+
+  /// No description provided for @receiptCameraUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera could not be opened. Check that your device has a working camera and try again.'**
+  String get receiptCameraUnavailable;
+
+  /// No description provided for @receiptPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt photo'**
+  String get receiptPreviewTitle;
+
+  /// No description provided for @receiptImageError.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo could not be displayed. Please choose another photo or retake it.'**
+  String get receiptImageError;
+
+  /// No description provided for @receiptRetake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake photo'**
+  String get receiptRetake;
+
+  /// No description provided for @receiptReadText.
+  ///
+  /// In en, this message translates to:
+  /// **'Read text'**
+  String get receiptReadText;
+
+  /// No description provided for @receiptOcrError.
+  ///
+  /// In en, this message translates to:
+  /// **'The receipt text could not be read. Please try again.'**
+  String get receiptOcrError;
+
+  /// No description provided for @receiptRecognizedText.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognized text'**
+  String get receiptRecognizedText;
+
+  /// No description provided for @receiptNoText.
+  ///
+  /// In en, this message translates to:
+  /// **'No text was found. Try again with a clearer photo.'**
+  String get receiptNoText;
+
   /// Shown above the group list when the server could not be reached.
   ///
   /// In en, this message translates to:
