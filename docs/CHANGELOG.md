@@ -13,6 +13,11 @@ Entry format:
 
 ---
 
+## 2026-11-16 — Document receipt OCR prototype (Enes Yahya Bodur)
+
+- Updated the roadmap to show the camera, gallery and raw OCR trial as implemented while keeping receipt parsing and device accuracy checks pending.
+- Updated the README with the prototype's current scope and how to try it.
+
 ## 2026-11-15 — Gallery input and OCR reading order (Enes Yahya Bodur)
 
 - Added gallery photo selection alongside camera capture, using the existing preview and raw OCR flow.
