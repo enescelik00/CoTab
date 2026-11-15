@@ -73,14 +73,16 @@ cd CoTab
 flutter pub get
 ```
 
-Connect the app to your own Firebase project using the [FlutterFire CLI](https://firebase.google.com/docs/flutter/setup):
+Firebase project: `cotab-7a4dc`. Ask Ahmet Anıl Çay (Firebase project owner) to add your Google account to it, then generate your own config files:
 
 ```bash
+npm install -g firebase-tools
+firebase login
 dart pub global activate flutterfire_cli
-flutterfire configure
+flutterfire configure --project=cotab-7a4dc --platforms=android
 ```
 
-Firebase configuration files (`google-services.json`, `GoogleService-Info.plist`, `firebase_options.dart`) are not committed to the repository.
+This creates `android/app/google-services.json` and `lib/firebase_options.dart`. They are not committed to the repository (see `.gitignore`), so run this once before your first `flutter run`. iOS is not configured yet.
 
 ### Run
 
