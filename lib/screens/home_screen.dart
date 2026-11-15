@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import '../models/group.dart';
 import '../services/auth_service.dart';
 import '../services/group_service.dart';
+import '../services/sync_service.dart';
 import 'create_group_screen.dart';
 import 'group_detail_screen.dart';
 import 'join_group_screen.dart';
@@ -11,7 +12,8 @@ import 'join_group_screen.dart';
 // Lists the groups of the signed-in user.
 class HomeScreen extends StatefulWidget {
   // Tests pass their own function that returns groups. Then the screen
-  // uses it instead of SQLite and Firestore. In the app it is null.
+  // uses it instead of SQLite and Firestore (no sync). In the app it is
+  // null.
   final Future<List<Group>> Function()? groupLoader;
 
   const HomeScreen({super.key, this.groupLoader});
@@ -20,21 +22,39 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+// WidgetsBindingObserver tells us when the app comes back to the
+// foreground, so we can sync again then.
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   List<Group> _groups = [];
   bool _isLoading = true;
+  // True when the last sync could not reach the server.
+  bool _isOffline = false;
 
   @override
   void initState() {
     super.initState();
-    _loadThenRefresh();
+    WidgetsBinding.instance.addObserver(this);
+    _loadThenSync();
   }
 
-  // Shows the groups saved on the phone right away, then downloads the
-  // latest data and shows the list again.
-  Future<void> _loadThenRefresh() async {
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _syncGroups();
+    }
+  }
+
+  // Shows the groups saved on the phone right away, then syncs with the
+  // server and shows the list again.
+  Future<void> _loadThenSync() async {
     await _loadGroups();
-    await _refreshGroups();
+    await _syncGroups();
   }
 
   Future<void> _loadGroups() async {
@@ -54,10 +74,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Also used by pull-to-refresh.
-  Future<void> _refreshGroups() async {
+  // Sends my changes and downloads the latest data. Also used by
+  // pull-to-refresh.
+  Future<void> _syncGroups() async {
     if (widget.groupLoader == null) {
-      await GroupService.refreshMyGroups();
+      final reachedServer = await SyncService.syncAll();
+      if (mounted) {
+        setState(() {
+          _isOffline = !reachedServer;
+        });
+      }
     }
     await _loadGroups();
   }
@@ -136,6 +162,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // A small line above the list while the server cannot be reached.
+  Widget _buildOfflineText(AppLocalizations texts) {
+    return Container(
+      width: double.infinity,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          const Icon(Icons.cloud_off, size: 16),
+          const SizedBox(width: 8),
+          Expanded(child: Text(texts.offlineShowingSavedData)),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final texts = AppLocalizations.of(context)!;
@@ -157,9 +199,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _refreshGroups,
-        child: _buildBody(texts),
+      body: Column(
+        children: [
+          if (_isOffline) _buildOfflineText(texts),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: _syncGroups,
+              child: _buildBody(texts),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _openCreateGroup,

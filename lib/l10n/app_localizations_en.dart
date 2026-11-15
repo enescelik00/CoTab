@@ -158,4 +158,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get expensesPlaceholder => 'Expenses will appear here soon.';
+
+  @override
+  String get offlineShowingSavedData => 'You\'re offline — showing saved data';
 }

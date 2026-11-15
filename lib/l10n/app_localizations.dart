@@ -391,6 +391,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expenses will appear here soon.'**
   String get expensesPlaceholder;
+
+  /// Shown above the group list when the server could not be reached.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline — showing saved data'**
+  String get offlineShowingSavedData;
 }
 
 class _AppLocalizationsDelegate

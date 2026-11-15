@@ -48,5 +48,6 @@
   "inviteCodeCopied": "Davet kodu kopyalandı.",
   "membersTitle": "Üyeler",
   "memberRoleAdmin": "Yönetici",
-  "expensesPlaceholder": "Harcamalar yakında burada görünecek."
+  "expensesPlaceholder": "Harcamalar yakında burada görünecek.",
+  "offlineShowingSavedData": "Çevrimdışısın — kayıtlı veriler gösteriliyor"
 }

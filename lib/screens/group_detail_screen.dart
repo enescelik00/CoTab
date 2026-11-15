@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group.dart';
 import '../services/group_service.dart';
+import '../services/sync_service.dart';
 
 // Shows one group: its invite code, its members and (later) its expenses.
 class GroupDetailScreen extends StatefulWidget {
@@ -26,11 +27,11 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   }
 
   // Shows the members saved on the phone first, then downloads the latest
-  // list (someone may have joined) and shows it again.
+  // data of the group (someone may have joined) and shows it again.
   Future<void> _loadMembers() async {
     await _readLocalMembers();
     try {
-      await GroupService.refreshMembers(widget.group.id);
+      await SyncService.pullGroup(widget.group.id);
       await _readLocalMembers();
     } catch (error) {
       // Probably offline. The local list is still shown.
