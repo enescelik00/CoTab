@@ -23,6 +23,7 @@ Entry format:
 - iOS is not configured yet.
 - README: added Firebase setup notes.
 - Kotlin Gradle plugin raised from 2.2.20 to 2.4.21, because firebase_auth's Android library is built with Kotlin 2.4.
+- Moved `kotlinOptions` to the new `kotlin { compilerOptions { ... } }` block (required by Kotlin 2.4) and ignored `android/.kotlin/`.
 
 ## 2026-11-01 — Sync columns and roadmap decisions (Enes Çelik)
 
