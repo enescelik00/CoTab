@@ -18,6 +18,7 @@ Entry format:
 - Added the sign-in and sign-up screens with form validation, a loading state and error messages in a SnackBar.
 - "Forgot password?" sends a password reset email to the typed address.
 - `AuthService` (`lib/services/auth_service.dart`) signs up, signs in and signs out with Firebase Auth, and saves the user to Firestore (`users/{uid}`) and to the local `users` table.
+- Firestore documents use exactly the same fields as the SQLite row (`toMap()`): collection name = table name, document id = row id. The coming sync service relies on this.
 - Added the `AppUser` model (`lib/models/app_user.dart`) that matches the `users` table.
 - `main.dart` now starts with `AuthGate`: the sign-in screen when nobody is signed in, the home screen otherwise. `CoTabApp` takes an optional `home` so tests can run without Firebase.
 - Home screen: added a sign-out button in the app bar.

@@ -49,15 +49,7 @@ class AuthService {
 
     AppUser user;
     if (document.exists) {
-      final data = document.data()!;
-      user = AppUser(
-        id: firebaseUser.uid,
-        name: data['name'] as String,
-        email: data['email'] as String,
-        avatarUrl: data['avatarUrl'] as String?,
-        updatedAt: data['updatedAt'] as int,
-        deletedAt: data['deletedAt'] as int?,
-      );
+      user = AppUser.fromMap(document.data()!);
     } else {
       // The user exists in Firebase Auth but not in Firestore yet.
       final userEmail = firebaseUser.email ?? email;
@@ -86,14 +78,14 @@ class AuthService {
     await FirebaseAuth.instance.signOut();
   }
 
+  // Sync convention: a Firestore document is exactly the SQLite row map
+  // (same keys), the collection name is the table name and the document id
+  // is the row id.
   static Future<void> _saveToFirestore(AppUser user) async {
-    await FirebaseFirestore.instance.collection('users').doc(user.id).set({
-      'name': user.name,
-      'email': user.email,
-      'avatarUrl': user.avatarUrl,
-      'updatedAt': user.updatedAt,
-      'deletedAt': user.deletedAt,
-    });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .set(user.toMap());
   }
 
   // Inserts the user, or replaces the row if it already exists.
