@@ -18,6 +18,7 @@ lib/
     database_helper.dart      # Opens the SQLite database and creates the tables
   widgets/                    # Small reusable widgets shared by screens
   utils/                      # Helper functions (formatting money, dates, ...)
+    app_theme.dart            # All colors, the font and the button/card/field styles
   l10n/
     app_en.arb                # English texts (default language)
     app_tr.arb                # Turkish texts
@@ -52,6 +53,17 @@ After editing an `.arb` file, `flutter run` or `flutter pub get` regenerates `li
 - Every table except `sync_queue` has `updated_at INTEGER NOT NULL` and `deleted_at INTEGER` (milliseconds since epoch, `DateTime.now().millisecondsSinceEpoch`). Update `updated_at` on every change. Never `DELETE` a row; set `deleted_at` instead and filter with `WHERE deleted_at IS NULL`.
 - Navigate between screens with `Navigator.push`.
 - Every user-facing text goes into both `app_en.arb` and `app_tr.arb`; read it with `AppLocalizations.of(context)!`.
+
+## Design rules
+
+The look of the app (forest green, cream, one mustard accent, Plus Jakarta Sans font, light and dark mode) is defined once in `lib/utils/app_theme.dart`. Every screen, old or new, follows these rules so the app looks the same everywhere:
+
+- Do not write colors (`Color(0xFF...)`, `Colors.red`) or `fontFamily` in screens and widgets. Read colors with `Theme.of(context).colorScheme` and text styles with `Theme.of(context).textTheme`. To change a color, change it in `app_theme.dart`, for light and dark mode.
+- Colors by meaning: `primary` (green) for main actions and "gets back" amounts, `error` (red) for errors and "owes" amounts, `onSurfaceVariant` for grey helper texts, `primaryContainer` with `onPrimaryContainer` for round icons (`CircleAvatar`).
+- Buttons: `FilledButton` for the main action of a screen, `OutlinedButton` for a second action, `TextButton` for small actions and dialog buttons, `FloatingActionButton.extended` (mustard) for "add" on list screens. Do not style a single button by hand.
+- Group related rows in a `Card`. Text fields use a plain `InputDecoration(labelText: ...)`; the border and fill come from the theme. A `DropdownButtonFormField` also gets `style: Theme.of(context).textTheme.bodyLarge`, so its text is not bolder than the text fields.
+- Spacing: 16 or 24 around a screen, 8, 16 or 24 between widgets.
+- Check every new screen in dark mode too (the sun/moon button on the home screen).
 
 ## Git workflow
 

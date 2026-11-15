@@ -281,7 +281,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               const SizedBox(height: 16),
               _buildDateField(texts),
               const SizedBox(height: 24),
-              Text(texts.splitLabel),
+              Text(
+                texts.splitLabel,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               _buildSplitTypeButtons(texts),
               const SizedBox(height: 8),
@@ -318,6 +321,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     return DropdownButtonFormField<String>(
       initialValue: _paidBy,
+      // Same text style as the text fields above (a dropdown is bold
+      // by default).
+      style: Theme.of(context).textTheme.bodyLarge,
       decoration: InputDecoration(labelText: texts.paidByLabel),
       items: items,
       onChanged: (value) {
@@ -347,6 +353,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     return DropdownButtonFormField<String>(
       initialValue: _category,
+      style: Theme.of(context).textTheme.bodyLarge,
       decoration: InputDecoration(labelText: texts.categoryLabel),
       items: items,
       onChanged: (value) {
@@ -468,7 +475,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           controller: controller,
           keyboardType: keyboardType,
           textAlign: TextAlign.end,
-          decoration: InputDecoration(isDense: true, suffixText: suffix),
+          // Smaller padding than a normal field, so it fits in the row.
+          decoration: InputDecoration(
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 10,
+            ),
+            suffixText: suffix,
+          ),
           // Rebuild so the total below is updated.
           onChanged: (value) => setState(() {}),
         ),

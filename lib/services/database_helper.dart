@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'cotab.db';
-  static const int _databaseVersion = 3;
+  static const int _databaseVersion = 4;
 
   static Database? _database;
 
@@ -56,6 +56,7 @@ class DatabaseHelper {
 
     await _createVersion2Tables(db);
     await _createVersion3Tables(db);
+    await _createVersion4Tables(db);
   }
 
   // Runs when the app finds a database file from an older app version.
@@ -71,7 +72,10 @@ class DatabaseHelper {
     if (oldVersion < 3) {
       await _createVersion3Tables(db);
     }
-    // Next version goes here: if (oldVersion < 4) { ... }
+    if (oldVersion < 4) {
+      await _createVersion4Tables(db);
+    }
+    // Next version goes here: if (oldVersion < 5) { ... }
   }
 
   // Added in version 2: group_members and sync_queue.
@@ -165,6 +169,22 @@ class DatabaseHelper {
         to_user_id TEXT NOT NULL,
         amount INTEGER NOT NULL,
         settled_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL,
+        deleted_at INTEGER
+      )
+    ''');
+  }
+
+  // Added in version 4: settings.
+  // Small choices of the user on this phone, one row per setting, e.g.
+  // key 'theme_mode' with the value 'light' or 'dark' (see ThemeService).
+  // It only lives on this phone and is never synced, so it is not in
+  // SyncService.groupTables.
+  static Future<void> _createVersion4Tables(Database db) async {
+    await db.execute('''
+      CREATE TABLE settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL,
         updated_at INTEGER NOT NULL,
         deleted_at INTEGER
       )

@@ -172,11 +172,21 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
             _buildInviteCodeCard(texts, textTheme),
             const SizedBox(height: 24),
             Text(texts.membersTitle, style: textTheme.titleMedium),
-            for (final member in _members)
-              MemberBalanceTile(
-                name: member['name'] as String,
-                isAdmin: member['role'] == 'admin',
-                balance: _balances[member['user_id']] ?? 0,
+            const SizedBox(height: 8),
+            // All members in one card. It is left out while the members
+            // are still loading, so no empty card is shown.
+            if (_members.isNotEmpty)
+              Card(
+                child: Column(
+                  children: [
+                    for (final member in _members)
+                      MemberBalanceTile(
+                        name: member['name'] as String,
+                        isAdmin: member['role'] == 'admin',
+                        balance: _balances[member['user_id']] ?? 0,
+                      ),
+                  ],
+                ),
               ),
             const SizedBox(height: 24),
             Text(texts.expensesTitle, style: textTheme.titleMedium),
@@ -185,14 +195,22 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Text(texts.noExpenses, textAlign: TextAlign.center),
               )
-            else
+            else ...[
               Text(texts.expensesDeleteHint, style: textTheme.bodySmall),
-            for (final expense in _expenses)
-              ExpenseTile(
-                expense: expense,
-                payerName: _memberName(expense.paidBy),
-                onLongPress: () => _confirmDelete(expense),
+              const SizedBox(height: 8),
+              Card(
+                child: Column(
+                  children: [
+                    for (final expense in _expenses)
+                      ExpenseTile(
+                        expense: expense,
+                        payerName: _memberName(expense.paidBy),
+                        onLongPress: () => _confirmDelete(expense),
+                      ),
+                  ],
+                ),
               ),
+            ],
           ],
         ),
       ),
@@ -200,6 +218,8 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   }
 
   Widget _buildInviteCodeCard(AppLocalizations texts, TextTheme textTheme) {
+    final colors = Theme.of(context).colorScheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -214,7 +234,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                   widget.group.inviteCode,
                   style: textTheme.headlineLarge?.copyWith(
                     letterSpacing: 4,
-                    fontWeight: FontWeight.bold,
+                    color: colors.primary,
                   ),
                 ),
                 IconButton(
@@ -225,7 +245,11 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            Text(texts.inviteCodeShareHint, textAlign: TextAlign.center),
+            Text(
+              texts.inviteCodeShareHint,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: colors.onSurfaceVariant),
+            ),
           ],
         ),
       ),

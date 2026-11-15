@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The green behind the logo in the app icon (the primary color of
+         the app, see lib/utils/app_theme.dart). -->
+    <color name="ic_launcher_background">#2E6B4A</color>
+</resources>

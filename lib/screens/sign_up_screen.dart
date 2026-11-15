@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../utils/auth_error_message.dart';
 import '../utils/validators.dart';
+import '../widgets/app_logo_header.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -97,6 +98,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const AppLogoHeader(),
+              const SizedBox(height: 32),
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(labelText: texts.nameLabel),

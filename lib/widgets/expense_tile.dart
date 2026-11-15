@@ -28,7 +28,6 @@ class ExpenseTile extends StatelessWidget {
     final dateText = MaterialLocalizations.of(context).formatMediumDate(date);
 
     return ListTile(
-      contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
         backgroundColor: colors.primaryContainer,
         foregroundColor: colors.onPrimaryContainer,

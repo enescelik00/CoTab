@@ -76,6 +76,7 @@ Diğer telefonların tabloyu indirebilmesi için tablo adını `SyncService.grou
 | 1 | `users`, `groups` | İskelet |
 | 2 | `group_members`, `sync_queue` | Ahmet Anıl |
 | 3 | `expenses`, `expense_items`, `expense_shares`, sonra `settlements` | Enes Çelik |
+| 4 | `settings` (açık/koyu mod seçimi; sadece telefonda, senkron edilmez) | Enes Çelik |
 
 Sürüm 3 için `lib/services/database_helper.dart`'ta:
 

@@ -41,6 +41,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signOutTooltip => 'Sign out';
 
   @override
+  String get appTagline => 'Shared expenses, shopping and chores in one place.';
+
+  @override
+  String get darkModeTooltip => 'Dark mode';
+
+  @override
+  String get lightModeTooltip => 'Light mode';
+
+  @override
   String get nameLabel => 'Name';
 
   @override

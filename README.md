@@ -29,7 +29,7 @@ CoTab is a mobile app for student houses and travel groups. It brings shared spe
 - [ ] Spending charts by category
 - [ ] Multiple currencies for travel groups
 - [ ] Recurring expenses (rent, internet, etc.)
-- [ ] Dark theme
+- [x] Dark theme
 
 The app is built in English with Turkish language support.
 

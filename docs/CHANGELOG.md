@@ -13,6 +13,17 @@ Entry format:
 
 ---
 
+## 2026-11-15 — New theme: green, cream and dark mode (Enes Çelik)
+
+- `lib/utils/app_theme.dart`: all colors (forest green, cream, one mustard accent), the font and the styles of buttons, cards, text fields and dialogs are defined here once, for light and dark mode. Screens only use the normal Flutter widgets and `Theme.of(context)`.
+- Font: Plus Jakarta Sans. The four `.ttf` files are in `assets/fonts/`, so it works offline and no package is needed.
+- Dark mode: a sun/moon button on the home screen switches between light and dark with one tap. On the first start the app follows the phone setting; after that the last choice is saved in the new `settings` table (database version 4, only on this phone, not synced) by `ThemeService`.
+- Screens: groups on the home screen are cards, the sign-in and sign-up screens share a logo with a short tagline (`AppLogoHeader` in `lib/widgets/`), members and expenses on the group screen are grouped in cards, and members show the first letter of their name in a circle.
+- `MemberBalanceTile` no longer has its own fixed green; "gets back" uses the primary color of the theme.
+- `CLAUDE.md`: new "Design rules" section, so new screens keep the same look.
+- App icon: the Flutter logo is replaced by the CoTab logo (a cream C with a mustard T inside, on green) on Android and iOS. Android 8+ uses an adaptive icon (`mipmap-anydpi-v26/ic_launcher.xml`). The sign-in and sign-up screens show the same logo (`assets/images/logo.png`). The design is saved as `docs/logo.svg`.
+- Tests: the light and dark theme, and that the app switches when the theme mode changes.
+
 ## 2026-11-15 — Add expense screen, expense list and balances (Enes Çelik)
 
 - New add expense screen: title, amount, who paid (me by default), category, date (today by default) and the split. Equal split: tick who shares it and see each share right away. Percent and amount split: one field per member and a running total that turns from red to green when it is right.

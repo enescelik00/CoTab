@@ -41,6 +41,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get signOutTooltip => 'Çıkış yap';
 
   @override
+  String get appTagline =>
+      'Ortak harcamalar, alışveriş ve ev işleri tek yerde.';
+
+  @override
+  String get darkModeTooltip => 'Koyu mod';
+
+  @override
+  String get lightModeTooltip => 'Açık mod';
+
+  @override
   String get nameLabel => 'Ad';
 
   @override

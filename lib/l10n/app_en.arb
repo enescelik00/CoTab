@@ -45,6 +45,18 @@
   "@signOutTooltip": {
     "description": "Tooltip of the sign-out button in the home screen app bar."
   },
+  "appTagline": "Shared expenses, shopping and chores in one place.",
+  "@appTagline": {
+    "description": "Short sentence under the app name on the sign-in screen."
+  },
+  "darkModeTooltip": "Dark mode",
+  "@darkModeTooltip": {
+    "description": "Tooltip of the home screen button that switches to dark mode."
+  },
+  "lightModeTooltip": "Light mode",
+  "@lightModeTooltip": {
+    "description": "Tooltip of the home screen button that switches to light mode."
+  },
   "nameLabel": "Name",
   "@nameLabel": {
     "description": "Label of the name field."

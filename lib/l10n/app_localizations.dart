@@ -158,6 +158,24 @@ abstract class AppLocalizations {
   /// **'Sign out'**
   String get signOutTooltip;
 
+  /// Short sentence under the app name on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared expenses, shopping and chores in one place.'**
+  String get appTagline;
+
+  /// Tooltip of the home screen button that switches to dark mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode'**
+  String get darkModeTooltip;
+
+  /// Tooltip of the home screen button that switches to light mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light mode'**
+  String get lightModeTooltip;
+
   /// Label of the name field.
   ///
   /// In en, this message translates to:
