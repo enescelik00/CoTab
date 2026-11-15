@@ -22,6 +22,7 @@ Entry format:
 - Firestore security rule in the Firebase console allows read and write only for signed-in users.
 - iOS is not configured yet.
 - README: added Firebase setup notes.
+- Kotlin Gradle plugin raised from 2.2.20 to 2.4.21, because firebase_auth's Android library is built with Kotlin 2.4.
 
 ## 2026-11-01 — Sync columns and roadmap decisions (Enes Çelik)
 
