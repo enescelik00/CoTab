@@ -13,6 +13,13 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Roadmap and README update (Enes Çelik)
+
+- Roadmap: marked the finished Phase 0 and Phase 1 items (Firebase, sign in, groups, sync, expenses, splitting, balances, theme and dark mode). Gate 1 still needs the test on two devices.
+- Roadmap: the data model table now matches the code (`group_id` in every synced table, `title` in `expenses`, the local `settings` table) and lists the database versions; the next table change is version 5.
+- Roadmap: editing an expense moved to Phase 2, the Figma wireframes were replaced by the design in `app_theme.dart`, and "Next steps" is now the list for 16–22 November.
+- README: ticked the five core features.
+
 ## 2026-11-15 — New theme: green, cream and dark mode (Enes Çelik)
 
 - `lib/utils/app_theme.dart`: all colors (forest green, cream, one mustard accent), the font and the styles of buttons, cards, text fields and dialogs are defined here once, for light and dark mode. Screens only use the normal Flutter widgets and `Theme.of(context)`.
