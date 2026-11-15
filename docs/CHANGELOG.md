@@ -13,6 +13,12 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Receipt camera and raw OCR trial (Enes Yahya Bodur)
+
+- Added a receipt camera entry on the group screen, photo preview and retake, and on-device ML Kit text recognition.
+- Added English and Turkish messages for camera and OCR errors, plus tests for basic failure cases.
+- Receipt parsing and expense saving remain for the next phase.
+
 ## 2026-11-15 — Roadmap and README update (Enes Çelik)
 
 - Roadmap: marked the finished Phase 0 and Phase 1 items (Firebase, sign in, groups, sync, expenses, splitting, balances, theme and dark mode). Gate 1 still needs the test on two devices.

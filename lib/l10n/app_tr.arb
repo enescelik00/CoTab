@@ -87,5 +87,17 @@
   "deleteButton": "Sil",
   "cancelButton": "Vazgeç",
   "expenseDeleted": "Harcama silindi.",
+  "scanReceiptTitle": "Fiş tara",
+  "receiptCameraHint": "Metnini okumayı denemek için fişin fotoğrafını çek.",
+  "receiptTakePhoto": "Fotoğraf çek",
+  "receiptCameraPermissionError": "Kamera izni verilmedi. Cihaz ayarlarından izin verip tekrar dene.",
+  "receiptCameraUnavailable": "Kamera açılamadı. Cihazın kamerasını kontrol edip tekrar dene.",
+  "receiptPreviewTitle": "Fiş fotoğrafı",
+  "receiptImageError": "Fotoğraf gösterilemedi. Lütfen yeniden çek.",
+  "receiptRetake": "Yeniden çek",
+  "receiptReadText": "Metni oku",
+  "receiptOcrError": "Fiş metni okunamadı. Lütfen tekrar dene.",
+  "receiptRecognizedText": "Okunan metin",
+  "receiptNoText": "Metin bulunamadı. Daha net bir fotoğrafla tekrar dene.",
   "offlineShowingSavedData": "Çevrimdışısın — kayıtlı veriler gösteriliyor"
 }

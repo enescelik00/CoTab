@@ -289,6 +289,46 @@ class AppLocalizationsTr extends AppLocalizations {
   String get expenseDeleted => 'Harcama silindi.';
 
   @override
+  String get scanReceiptTitle => 'Fiş tara';
+
+  @override
+  String get receiptCameraHint =>
+      'Metnini okumayı denemek için fişin fotoğrafını çek.';
+
+  @override
+  String get receiptTakePhoto => 'Fotoğraf çek';
+
+  @override
+  String get receiptCameraPermissionError =>
+      'Kamera izni verilmedi. Cihaz ayarlarından izin verip tekrar dene.';
+
+  @override
+  String get receiptCameraUnavailable =>
+      'Kamera açılamadı. Cihazın kamerasını kontrol edip tekrar dene.';
+
+  @override
+  String get receiptPreviewTitle => 'Fiş fotoğrafı';
+
+  @override
+  String get receiptImageError => 'Fotoğraf gösterilemedi. Lütfen yeniden çek.';
+
+  @override
+  String get receiptRetake => 'Yeniden çek';
+
+  @override
+  String get receiptReadText => 'Metni oku';
+
+  @override
+  String get receiptOcrError => 'Fiş metni okunamadı. Lütfen tekrar dene.';
+
+  @override
+  String get receiptRecognizedText => 'Okunan metin';
+
+  @override
+  String get receiptNoText =>
+      'Metin bulunamadı. Daha net bir fotoğrafla tekrar dene.';
+
+  @override
   String get offlineShowingSavedData =>
       'Çevrimdışısın — kayıtlı veriler gösteriliyor';
 }

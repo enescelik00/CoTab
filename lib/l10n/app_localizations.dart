@@ -620,6 +620,78 @@ abstract class AppLocalizations {
   /// **'Expense deleted.'**
   String get expenseDeleted;
 
+  /// No description provided for @scanReceiptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan receipt'**
+  String get scanReceiptTitle;
+
+  /// No description provided for @receiptCameraHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph a receipt to try reading its text.'**
+  String get receiptCameraHint;
+
+  /// No description provided for @receiptTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get receiptTakePhoto;
+
+  /// No description provided for @receiptCameraPermissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is denied. Allow it in your device settings and try again.'**
+  String get receiptCameraPermissionError;
+
+  /// No description provided for @receiptCameraUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera could not be opened. Check that your device has a working camera and try again.'**
+  String get receiptCameraUnavailable;
+
+  /// No description provided for @receiptPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt photo'**
+  String get receiptPreviewTitle;
+
+  /// No description provided for @receiptImageError.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo could not be displayed. Please retake it.'**
+  String get receiptImageError;
+
+  /// No description provided for @receiptRetake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake photo'**
+  String get receiptRetake;
+
+  /// No description provided for @receiptReadText.
+  ///
+  /// In en, this message translates to:
+  /// **'Read text'**
+  String get receiptReadText;
+
+  /// No description provided for @receiptOcrError.
+  ///
+  /// In en, this message translates to:
+  /// **'The receipt text could not be read. Please try again.'**
+  String get receiptOcrError;
+
+  /// No description provided for @receiptRecognizedText.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognized text'**
+  String get receiptRecognizedText;
+
+  /// No description provided for @receiptNoText.
+  ///
+  /// In en, this message translates to:
+  /// **'No text was found. Try again with a clearer photo.'**
+  String get receiptNoText;
+
   /// Shown above the group list when the server could not be reached.
   ///
   /// In en, this message translates to:

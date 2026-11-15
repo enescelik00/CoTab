@@ -389,6 +389,18 @@
   "@expenseDeleted": {
     "description": "Shown after an expense was deleted."
   },
+  "scanReceiptTitle": "Scan receipt",
+  "receiptCameraHint": "Photograph a receipt to try reading its text.",
+  "receiptTakePhoto": "Take photo",
+  "receiptCameraPermissionError": "Camera access is denied. Allow it in your device settings and try again.",
+  "receiptCameraUnavailable": "The camera could not be opened. Check that your device has a working camera and try again.",
+  "receiptPreviewTitle": "Receipt photo",
+  "receiptImageError": "The photo could not be displayed. Please retake it.",
+  "receiptRetake": "Retake photo",
+  "receiptReadText": "Read text",
+  "receiptOcrError": "The receipt text could not be read. Please try again.",
+  "receiptRecognizedText": "Recognized text",
+  "receiptNoText": "No text was found. Try again with a clearer photo.",
   "offlineShowingSavedData": "You're offline — showing saved data",
   "@offlineShowingSavedData": {
     "description": "Shown above the group list when the server could not be reached."

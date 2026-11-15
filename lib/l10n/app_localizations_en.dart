@@ -287,5 +287,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expenseDeleted => 'Expense deleted.';
 
   @override
+  String get scanReceiptTitle => 'Scan receipt';
+
+  @override
+  String get receiptCameraHint =>
+      'Photograph a receipt to try reading its text.';
+
+  @override
+  String get receiptTakePhoto => 'Take photo';
+
+  @override
+  String get receiptCameraPermissionError =>
+      'Camera access is denied. Allow it in your device settings and try again.';
+
+  @override
+  String get receiptCameraUnavailable =>
+      'The camera could not be opened. Check that your device has a working camera and try again.';
+
+  @override
+  String get receiptPreviewTitle => 'Receipt photo';
+
+  @override
+  String get receiptImageError =>
+      'The photo could not be displayed. Please retake it.';
+
+  @override
+  String get receiptRetake => 'Retake photo';
+
+  @override
+  String get receiptReadText => 'Read text';
+
+  @override
+  String get receiptOcrError =>
+      'The receipt text could not be read. Please try again.';
+
+  @override
+  String get receiptRecognizedText => 'Recognized text';
+
+  @override
+  String get receiptNoText =>
+      'No text was found. Try again with a clearer photo.';
+
+  @override
   String get offlineShowingSavedData => 'You\'re offline — showing saved data';
 }
