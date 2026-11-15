@@ -91,4 +91,71 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get authErrorUnknown => 'Bir şeyler ters gitti. Lütfen tekrar dene.';
+
+  @override
+  String get homeCreateGroup => 'Yeni grup';
+
+  @override
+  String get joinGroupTitle => 'Gruba katıl';
+
+  @override
+  String get createGroupTitle => 'Grup oluştur';
+
+  @override
+  String get groupNameLabel => 'Grup adı';
+
+  @override
+  String get groupNameRequired => 'Lütfen grup adını yaz.';
+
+  @override
+  String get groupTypeLabel => 'Ne tür bir grup?';
+
+  @override
+  String get groupTypeHome => 'Ev';
+
+  @override
+  String get groupTypeTrip => 'Seyahat';
+
+  @override
+  String get createGroupButton => 'Oluştur';
+
+  @override
+  String get inviteCodeLabel => 'Davet kodu';
+
+  @override
+  String get inviteCodeInvalidLength => 'Lütfen 6 karakterlik kodu yaz.';
+
+  @override
+  String get joinGroupHint => 'Davet kodunu gruptaki birinden iste.';
+
+  @override
+  String get joinGroupButton => 'Katıl';
+
+  @override
+  String get joinErrorInvalidCode => 'Bu kodla bir grup bulunamadı.';
+
+  @override
+  String get errorNoInternet => 'İnternet bağlantısı yok. Lütfen tekrar dene.';
+
+  @override
+  String get errorUnknown => 'Bir şeyler ters gitti. Lütfen tekrar dene.';
+
+  @override
+  String get inviteCodeShareHint =>
+      'Arkadaşların katılabilsin diye bu kodu paylaş.';
+
+  @override
+  String get inviteCodeCopy => 'Kodu kopyala';
+
+  @override
+  String get inviteCodeCopied => 'Davet kodu kopyalandı.';
+
+  @override
+  String get membersTitle => 'Üyeler';
+
+  @override
+  String get memberRoleAdmin => 'Yönetici';
+
+  @override
+  String get expensesPlaceholder => 'Harcamalar yakında burada görünecek.';
 }

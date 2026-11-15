@@ -92,4 +92,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authErrorUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get homeCreateGroup => 'New group';
+
+  @override
+  String get joinGroupTitle => 'Join a group';
+
+  @override
+  String get createGroupTitle => 'Create a group';
+
+  @override
+  String get groupNameLabel => 'Group name';
+
+  @override
+  String get groupNameRequired => 'Please enter a group name.';
+
+  @override
+  String get groupTypeLabel => 'What kind of group is it?';
+
+  @override
+  String get groupTypeHome => 'Home';
+
+  @override
+  String get groupTypeTrip => 'Trip';
+
+  @override
+  String get createGroupButton => 'Create';
+
+  @override
+  String get inviteCodeLabel => 'Invite code';
+
+  @override
+  String get inviteCodeInvalidLength => 'Please enter the 6-character code.';
+
+  @override
+  String get joinGroupHint => 'Ask someone in the group for the invite code.';
+
+  @override
+  String get joinGroupButton => 'Join';
+
+  @override
+  String get joinErrorInvalidCode => 'No group found with this code.';
+
+  @override
+  String get errorNoInternet => 'No internet connection. Please try again.';
+
+  @override
+  String get errorUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get inviteCodeShareHint => 'Share this code so your friends can join.';
+
+  @override
+  String get inviteCodeCopy => 'Copy code';
+
+  @override
+  String get inviteCodeCopied => 'Invite code copied.';
+
+  @override
+  String get membersTitle => 'Members';
+
+  @override
+  String get memberRoleAdmin => 'Admin';
+
+  @override
+  String get expensesPlaceholder => 'Expenses will appear here soon.';
 }

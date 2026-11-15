@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'cotab.db';
-  static const int _databaseVersion = 1;
+  static const int _databaseVersion = 2;
 
   static Database? _database;
 
@@ -20,6 +20,7 @@ class DatabaseHelper {
       path,
       version: _databaseVersion,
       onCreate: _createTables,
+      onUpgrade: _upgradeTables,
     );
     return _database!;
   }
@@ -48,6 +49,37 @@ class DatabaseHelper {
         type TEXT NOT NULL,
         currency TEXT NOT NULL,
         invite_code TEXT NOT NULL UNIQUE,
+        updated_at INTEGER NOT NULL,
+        deleted_at INTEGER
+      )
+    ''');
+
+    await _createGroupMembersTable(db);
+  }
+
+  // Runs when the app finds a database file from an older app version.
+  // Each step adds what that version introduced, so no data is lost.
+  static Future<void> _upgradeTables(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) async {
+    if (oldVersion < 2) {
+      await _createGroupMembersTable(db);
+    }
+    // Next version goes here: if (oldVersion < 3) { ... }
+  }
+
+  // Added in version 2. The id is '${groupId}_${userId}', so the same
+  // membership always gets the same id on every phone.
+  static Future<void> _createGroupMembersTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE group_members (
+        id TEXT PRIMARY KEY,
+        group_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        role TEXT NOT NULL,
+        joined_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
         deleted_at INTEGER
       )
