@@ -13,6 +13,17 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Sign up and sign in (Ahmet Anıl Çay)
+
+- Added the sign-in and sign-up screens with form validation, a loading state and error messages in a SnackBar.
+- "Forgot password?" sends a password reset email to the typed address.
+- `AuthService` (`lib/services/auth_service.dart`) signs up, signs in and signs out with Firebase Auth, and saves the user to Firestore (`users/{uid}`) and to the local `users` table.
+- Added the `AppUser` model (`lib/models/app_user.dart`) that matches the `users` table.
+- `main.dart` now starts with `AuthGate`: the sign-in screen when nobody is signed in, the home screen otherwise. `CoTabApp` takes an optional `home` so tests can run without Firebase.
+- Home screen: added a sign-out button in the app bar.
+- Added English and Turkish texts for the new screens and Firebase error messages.
+- Tests: `AppUser` map round trip and sign-in form validation.
+
 ## 2026-11-15 — Firebase setup (Ahmet Anıl Çay)
 
 - Added the packages `firebase_core`, `firebase_auth` and `cloud_firestore`.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../services/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,6 +13,14 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(texts.appTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: texts.signOutTooltip,
+            // After signing out, the AuthGate shows the sign-in screen.
+            onPressed: () => AuthService.signOut(),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
