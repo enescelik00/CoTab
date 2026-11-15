@@ -13,6 +13,11 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Team notes (Ahmet Anıl Çay)
+
+- Added `docs/Ekip_Notlari.md` (Turkish) with the setup steps teammates need: Flutter and Java versions, Kotlin upgrade, Firebase configuration.
+- Documented the data and sync rules: SQLite as the source of truth, `SyncService.saveRow`, sync columns, and database version ownership.
+
 ## 2026-11-01 — Sync columns and roadmap decisions (Enes Çelik)
 
 - Added `updated_at` and `deleted_at` (INTEGER, milliseconds since epoch) to the `users` and `groups` tables. Every future table except `sync_queue` gets them too: the newer `updated_at` wins when syncing, and rows are soft-deleted with `deleted_at`.
