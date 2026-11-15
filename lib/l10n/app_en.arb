@@ -11,5 +11,198 @@
   "homeNoGroups": "You are not in any group yet.",
   "@homeNoGroups": {
     "description": "Shown on the home screen when the user has no groups."
+  },
+  "signInTitle": "Sign in",
+  "@signInTitle": {
+    "description": "Title of the sign-in screen and text of its button."
+  },
+  "signUpTitle": "Create an account",
+  "@signUpTitle": {
+    "description": "Title of the sign-up screen."
+  },
+  "signUpButton": "Sign up",
+  "@signUpButton": {
+    "description": "Button that creates a new account."
+  },
+  "noAccountSignUp": "Don't have an account? Sign up",
+  "@noAccountSignUp": {
+    "description": "Link on the sign-in screen that opens the sign-up screen."
+  },
+  "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Link on the sign-in screen that sends a password reset email."
+  },
+  "passwordResetSent": "We sent a password reset email to {email}.",
+  "@passwordResetSent": {
+    "description": "Shown after the password reset email was sent.",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "signOutTooltip": "Sign out",
+  "@signOutTooltip": {
+    "description": "Tooltip of the sign-out button in the home screen app bar."
+  },
+  "nameLabel": "Name",
+  "@nameLabel": {
+    "description": "Label of the name field."
+  },
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Label of the email field."
+  },
+  "passwordLabel": "Password",
+  "@passwordLabel": {
+    "description": "Label of the password field."
+  },
+  "confirmPasswordLabel": "Confirm password",
+  "@confirmPasswordLabel": {
+    "description": "Label of the field where the password is typed a second time."
+  },
+  "nameRequired": "Please enter your name.",
+  "@nameRequired": {
+    "description": "Validation error when the name field is empty."
+  },
+  "emailRequired": "Please enter your email.",
+  "@emailRequired": {
+    "description": "Validation error when the email field is empty."
+  },
+  "emailInvalid": "Please enter a valid email.",
+  "@emailInvalid": {
+    "description": "Validation error when the email has no @."
+  },
+  "passwordRequired": "Please enter your password.",
+  "@passwordRequired": {
+    "description": "Validation error when the password field is empty."
+  },
+  "passwordTooShort": "Password must be at least 6 characters.",
+  "@passwordTooShort": {
+    "description": "Validation error when the password is shorter than 6 characters."
+  },
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "@passwordsDoNotMatch": {
+    "description": "Validation error when the two passwords are different."
+  },
+  "authErrorInvalidEmail": "This email address is not valid.",
+  "@authErrorInvalidEmail": {
+    "description": "Firebase error: invalid-email."
+  },
+  "authErrorWrongCredentials": "Email or password is wrong.",
+  "@authErrorWrongCredentials": {
+    "description": "Firebase error: user-not-found, wrong-password or invalid-credential."
+  },
+  "authErrorEmailInUse": "An account with this email already exists.",
+  "@authErrorEmailInUse": {
+    "description": "Firebase error: email-already-in-use."
+  },
+  "authErrorWeakPassword": "This password is too weak.",
+  "@authErrorWeakPassword": {
+    "description": "Firebase error: weak-password."
+  },
+  "authErrorNetwork": "No internet connection. Please try again.",
+  "@authErrorNetwork": {
+    "description": "Firebase error: network-request-failed."
+  },
+  "authErrorTooManyRequests": "Too many attempts. Please wait a bit and try again.",
+  "@authErrorTooManyRequests": {
+    "description": "Firebase error: too-many-requests."
+  },
+  "authErrorUnknown": "Something went wrong. Please try again.",
+  "@authErrorUnknown": {
+    "description": "Shown for any other sign-in or sign-up error."
+  },
+  "homeCreateGroup": "New group",
+  "@homeCreateGroup": {
+    "description": "Floating button on the home screen that opens the create group screen."
+  },
+  "joinGroupTitle": "Join a group",
+  "@joinGroupTitle": {
+    "description": "Title of the join group screen and tooltip of its button on the home screen."
+  },
+  "createGroupTitle": "Create a group",
+  "@createGroupTitle": {
+    "description": "Title of the create group screen."
+  },
+  "groupNameLabel": "Group name",
+  "@groupNameLabel": {
+    "description": "Label of the group name field."
+  },
+  "groupNameRequired": "Please enter a group name.",
+  "@groupNameRequired": {
+    "description": "Validation error when the group name is empty."
+  },
+  "groupTypeLabel": "What kind of group is it?",
+  "@groupTypeLabel": {
+    "description": "Label above the home/trip choice."
+  },
+  "groupTypeHome": "Home",
+  "@groupTypeHome": {
+    "description": "Group type for people who live together."
+  },
+  "groupTypeTrip": "Trip",
+  "@groupTypeTrip": {
+    "description": "Group type for people who travel together."
+  },
+  "createGroupButton": "Create",
+  "@createGroupButton": {
+    "description": "Button that creates the group."
+  },
+  "inviteCodeLabel": "Invite code",
+  "@inviteCodeLabel": {
+    "description": "Label of the invite code field and title of the invite code card."
+  },
+  "inviteCodeInvalidLength": "Please enter the 6-character code.",
+  "@inviteCodeInvalidLength": {
+    "description": "Validation error when the invite code is not 6 characters long."
+  },
+  "joinGroupHint": "Ask someone in the group for the invite code.",
+  "@joinGroupHint": {
+    "description": "Hint on the join group screen."
+  },
+  "joinGroupButton": "Join",
+  "@joinGroupButton": {
+    "description": "Button that joins the group with the typed code."
+  },
+  "joinErrorInvalidCode": "No group found with this code.",
+  "@joinErrorInvalidCode": {
+    "description": "Shown when no group has the typed invite code."
+  },
+  "errorNoInternet": "No internet connection. Please try again.",
+  "@errorNoInternet": {
+    "description": "Shown when an action needs internet and there is none."
+  },
+  "errorUnknown": "Something went wrong. Please try again.",
+  "@errorUnknown": {
+    "description": "Shown for any other error."
+  },
+  "inviteCodeShareHint": "Share this code so your friends can join.",
+  "@inviteCodeShareHint": {
+    "description": "Text under the invite code on the group screen."
+  },
+  "inviteCodeCopy": "Copy code",
+  "@inviteCodeCopy": {
+    "description": "Tooltip of the button that copies the invite code."
+  },
+  "inviteCodeCopied": "Invite code copied.",
+  "@inviteCodeCopied": {
+    "description": "Shown after the invite code was copied."
+  },
+  "membersTitle": "Members",
+  "@membersTitle": {
+    "description": "Title of the member list on the group screen."
+  },
+  "memberRoleAdmin": "Admin",
+  "@memberRoleAdmin": {
+    "description": "Label next to the name of the group admin."
+  },
+  "expensesPlaceholder": "Expenses will appear here soon.",
+  "@expensesPlaceholder": {
+    "description": "Placeholder on the group screen until the expenses module is ready."
+  },
+  "offlineShowingSavedData": "You're offline — showing saved data",
+  "@offlineShowingSavedData": {
+    "description": "Shown above the group list when the server could not be reached."
   }
 }

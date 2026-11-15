@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'cotab.db';
-  static const int _databaseVersion = 1;
+  static const int _databaseVersion = 2;
 
   static Database? _database;
 
@@ -20,6 +20,7 @@ class DatabaseHelper {
       path,
       version: _databaseVersion,
       onCreate: _createTables,
+      onUpgrade: _upgradeTables,
     );
     return _database!;
   }
@@ -50,6 +51,51 @@ class DatabaseHelper {
         invite_code TEXT NOT NULL UNIQUE,
         updated_at INTEGER NOT NULL,
         deleted_at INTEGER
+      )
+    ''');
+
+    await _createVersion2Tables(db);
+  }
+
+  // Runs when the app finds a database file from an older app version.
+  // Each step adds what that version introduced, so no data is lost.
+  static Future<void> _upgradeTables(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) async {
+    if (oldVersion < 2) {
+      await _createVersion2Tables(db);
+    }
+    // Next version goes here: if (oldVersion < 3) { ... }
+  }
+
+  // Added in version 2: group_members and sync_queue.
+  static Future<void> _createVersion2Tables(Database db) async {
+    // The id is '${groupId}_${userId}', so the same membership always gets
+    // the same id on every phone.
+    await db.execute('''
+      CREATE TABLE group_members (
+        id TEXT PRIMARY KEY,
+        group_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        role TEXT NOT NULL,
+        joined_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL,
+        deleted_at INTEGER
+      )
+    ''');
+
+    // The list of local changes that still have to be sent to Firestore
+    // (see SyncService). It only lives on this phone and is never synced.
+    // It is the one table without updated_at and deleted_at: a row is
+    // really DELETEd once its change has reached the server.
+    await db.execute('''
+      CREATE TABLE sync_queue (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        table_name TEXT NOT NULL,
+        row_id TEXT NOT NULL,
+        created_at INTEGER NOT NULL
       )
     ''');
   }

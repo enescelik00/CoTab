@@ -1,14 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
-import 'screens/home_screen.dart';
+import 'screens/auth_gate.dart';
 
-void main() {
+Future<void> main() async {
+  // Firebase must be ready before the first screen is shown.
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const CoTabApp());
 }
 
 class CoTabApp extends StatelessWidget {
-  const CoTabApp({super.key});
+  // The first screen. When it is null, the AuthGate decides between the
+  // sign-in and home screens. Tests pass their own screen here, so they
+  // do not need Firebase.
+  final Widget? home;
+
+  const CoTabApp({super.key, this.home});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +30,7 @@ class CoTabApp extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const HomeScreen(),
+      home: home ?? const AuthGate(),
     );
   }
 }
