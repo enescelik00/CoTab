@@ -291,10 +291,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get receiptCameraHint =>
-      'Photograph a receipt to try reading its text.';
+      'Photograph a receipt or choose a photo to try reading its text.';
 
   @override
   String get receiptTakePhoto => 'Take photo';
+
+  @override
+  String get receiptChooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get receiptChooseAnother => 'Choose another photo';
+
+  @override
+  String get receiptGalleryPermissionError =>
+      'Photo access is denied. Allow it in your device settings and try again.';
+
+  @override
+  String get receiptGalleryUnavailable =>
+      'The photo library could not be opened. Please try again.';
 
   @override
   String get receiptCameraPermissionError =>
@@ -309,7 +323,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get receiptImageError =>
-      'The photo could not be displayed. Please retake it.';
+      'The photo could not be displayed. Please choose another photo or retake it.';
 
   @override
   String get receiptRetake => 'Retake photo';

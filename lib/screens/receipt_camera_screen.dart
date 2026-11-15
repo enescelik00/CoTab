@@ -6,51 +6,66 @@ import '../l10n/app_localizations.dart';
 import 'receipt_preview_screen.dart';
 
 class ReceiptCameraScreen extends StatefulWidget {
-  final Future<XFile?> Function()? takePhoto;
+  final Future<XFile?> Function(ImageSource)? pickImage;
 
-  const ReceiptCameraScreen({super.key, this.takePhoto});
+  const ReceiptCameraScreen({super.key, this.pickImage});
 
   @override
   State<ReceiptCameraScreen> createState() => _ReceiptCameraScreenState();
 }
 
 class _ReceiptCameraScreenState extends State<ReceiptCameraScreen> {
-  bool _isTakingPhoto = false;
+  bool _isPickingImage = false;
   String? _error;
 
-  Future<void> _takePhoto() async {
+  Future<void> _pickImage(ImageSource source) async {
     final texts = AppLocalizations.of(context)!;
     setState(() {
-      _isTakingPhoto = true;
+      _isPickingImage = true;
       _error = null;
     });
 
     try {
-      final photo = widget.takePhoto != null
-          ? await widget.takePhoto!()
-          : await ImagePicker().pickImage(source: ImageSource.camera);
+      final photo = widget.pickImage != null
+          ? await widget.pickImage!(source)
+          : await ImagePicker().pickImage(source: source);
       if (!mounted || photo == null) return;
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ReceiptPreviewScreen(photo: photo),
+          builder: (context) => ReceiptPreviewScreen(
+            photo: photo,
+            fromGallery: source == ImageSource.gallery,
+          ),
         ),
       );
     } on PlatformException catch (error) {
       if (mounted) {
         setState(() {
-          _error =
-              error.code == 'camera_access_denied' ||
-                  error.code == 'camera_access_denied_without_prompt' ||
-                  error.code == 'camera_access_restricted'
-              ? texts.receiptCameraPermissionError
-              : texts.receiptCameraUnavailable;
+          if (source == ImageSource.gallery) {
+            _error = error.code == 'photo_access_denied'
+                ? texts.receiptGalleryPermissionError
+                : texts.receiptGalleryUnavailable;
+          } else {
+            _error =
+                error.code == 'camera_access_denied' ||
+                    error.code == 'camera_access_denied_without_prompt' ||
+                    error.code == 'camera_access_restricted'
+                ? texts.receiptCameraPermissionError
+                : texts.receiptCameraUnavailable;
+          }
         });
       }
     } catch (_) {
-      if (mounted) setState(() => _error = texts.receiptCameraUnavailable);
+      if (mounted) {
+        setState(
+          () => _error = source == ImageSource.gallery
+              ? texts.receiptGalleryUnavailable
+              : texts.receiptCameraUnavailable,
+        );
+      }
     } finally {
-      if (mounted) setState(() => _isTakingPhoto = false);
+      if (mounted) setState(() => _isPickingImage = false);
     }
   }
 
@@ -77,14 +92,21 @@ class _ReceiptCameraScreenState extends State<ReceiptCameraScreen> {
                 ),
               ],
               const SizedBox(height: 24),
-              if (_isTakingPhoto)
+              if (_isPickingImage)
                 const CircularProgressIndicator()
-              else
+              else ...[
                 FilledButton.icon(
-                  onPressed: _takePhoto,
+                  onPressed: () => _pickImage(ImageSource.camera),
                   icon: const Icon(Icons.camera_alt_outlined),
                   label: Text(texts.receiptTakePhoto),
                 ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: () => _pickImage(ImageSource.gallery),
+                  icon: const Icon(Icons.photo_library_outlined),
+                  label: Text(texts.receiptChooseFromGallery),
+                ),
+              ],
             ],
           ),
         ),

@@ -629,7 +629,7 @@ abstract class AppLocalizations {
   /// No description provided for @receiptCameraHint.
   ///
   /// In en, this message translates to:
-  /// **'Photograph a receipt to try reading its text.'**
+  /// **'Photograph a receipt or choose a photo to try reading its text.'**
   String get receiptCameraHint;
 
   /// No description provided for @receiptTakePhoto.
@@ -637,6 +637,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take photo'**
   String get receiptTakePhoto;
+
+  /// No description provided for @receiptChooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get receiptChooseFromGallery;
+
+  /// No description provided for @receiptChooseAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another photo'**
+  String get receiptChooseAnother;
+
+  /// No description provided for @receiptGalleryPermissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo access is denied. Allow it in your device settings and try again.'**
+  String get receiptGalleryPermissionError;
+
+  /// No description provided for @receiptGalleryUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo library could not be opened. Please try again.'**
+  String get receiptGalleryUnavailable;
 
   /// No description provided for @receiptCameraPermissionError.
   ///
@@ -659,7 +683,7 @@ abstract class AppLocalizations {
   /// No description provided for @receiptImageError.
   ///
   /// In en, this message translates to:
-  /// **'The photo could not be displayed. Please retake it.'**
+  /// **'The photo could not be displayed. Please choose another photo or retake it.'**
   String get receiptImageError;
 
   /// No description provided for @receiptRetake.

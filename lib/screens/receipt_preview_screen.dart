@@ -9,8 +9,14 @@ import '../services/receipt_ocr_service.dart';
 class ReceiptPreviewScreen extends StatefulWidget {
   final XFile photo;
   final Future<String> Function(String)? readText;
+  final bool fromGallery;
 
-  const ReceiptPreviewScreen({super.key, required this.photo, this.readText});
+  const ReceiptPreviewScreen({
+    super.key,
+    required this.photo,
+    this.readText,
+    this.fromGallery = false,
+  });
 
   @override
   State<ReceiptPreviewScreen> createState() => _ReceiptPreviewScreenState();
@@ -61,7 +67,11 @@ class _ReceiptPreviewScreenState extends State<ReceiptPreviewScreen> {
           const SizedBox(height: 16),
           OutlinedButton(
             onPressed: _isReading ? null : () => Navigator.pop(context),
-            child: Text(texts.receiptRetake),
+            child: Text(
+              widget.fromGallery
+                  ? texts.receiptChooseAnother
+                  : texts.receiptRetake,
+            ),
           ),
           const SizedBox(height: 8),
           FilledButton(

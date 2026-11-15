@@ -13,6 +13,12 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Gallery input and OCR reading order (Enes Yahya Bodur)
+
+- Added gallery photo selection alongside camera capture, using the existing preview and raw OCR flow.
+- Added English and Turkish gallery error messages and widget tests.
+- Display OCR lines by their position on the receipt (top to bottom, then left to right on each row) so raw text is easier to inspect. This does not parse receipt fields.
+
 ## 2026-11-15 — Receipt camera and raw OCR trial (Enes Yahya Bodur)
 
 - Added a receipt camera entry on the group screen, photo preview and retake, and on-device ML Kit text recognition.

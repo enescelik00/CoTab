@@ -293,10 +293,24 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get receiptCameraHint =>
-      'Metnini okumayı denemek için fişin fotoğrafını çek.';
+      'Fişin fotoğrafını çek veya galeriden seçip metnini okumayı dene.';
 
   @override
   String get receiptTakePhoto => 'Fotoğraf çek';
+
+  @override
+  String get receiptChooseFromGallery => 'Galeriden seç';
+
+  @override
+  String get receiptChooseAnother => 'Başka fotoğraf seç';
+
+  @override
+  String get receiptGalleryPermissionError =>
+      'Fotoğraf izni verilmedi. Cihaz ayarlarından izin verip tekrar dene.';
+
+  @override
+  String get receiptGalleryUnavailable =>
+      'Fotoğraf galerisi açılamadı. Lütfen tekrar dene.';
 
   @override
   String get receiptCameraPermissionError =>
@@ -310,7 +324,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get receiptPreviewTitle => 'Fiş fotoğrafı';
 
   @override
-  String get receiptImageError => 'Fotoğraf gösterilemedi. Lütfen yeniden çek.';
+  String get receiptImageError =>
+      'Fotoğraf gösterilemedi. Lütfen başka bir fotoğraf seç veya yeniden çek.';
 
   @override
   String get receiptRetake => 'Yeniden çek';
