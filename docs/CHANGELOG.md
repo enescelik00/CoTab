@@ -13,6 +13,55 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Roadmap and README update (Enes Çelik)
+
+- Roadmap: marked the finished Phase 0 and Phase 1 items (Firebase, sign in, groups, sync, expenses, splitting, balances, theme and dark mode). Gate 1 still needs the test on two devices.
+- Roadmap: the data model table now matches the code (`group_id` in every synced table, `title` in `expenses`, the local `settings` table) and lists the database versions; the next table change is version 5.
+- Roadmap: editing an expense moved to Phase 2, the Figma wireframes were replaced by the design in `app_theme.dart`, and "Next steps" is now the list for 16–22 November.
+- README: ticked the five core features.
+
+## 2026-11-15 — New theme: green, cream and dark mode (Enes Çelik)
+
+- `lib/utils/app_theme.dart`: all colors (forest green, cream, one mustard accent), the font and the styles of buttons, cards, text fields and dialogs are defined here once, for light and dark mode. Screens only use the normal Flutter widgets and `Theme.of(context)`.
+- Font: Plus Jakarta Sans. The four `.ttf` files are in `assets/fonts/`, so it works offline and no package is needed.
+- Dark mode: a sun/moon button on the home screen switches between light and dark with one tap. On the first start the app follows the phone setting; after that the last choice is saved in the new `settings` table (database version 4, only on this phone, not synced) by `ThemeService`.
+- Screens: groups on the home screen are cards, the sign-in and sign-up screens share a logo with a short tagline (`AppLogoHeader` in `lib/widgets/`), members and expenses on the group screen are grouped in cards, and members show the first letter of their name in a circle.
+- `MemberBalanceTile` no longer has its own fixed green; "gets back" uses the primary color of the theme.
+- `CLAUDE.md`: new "Design rules" section, so new screens keep the same look.
+- App icon: the Flutter logo is replaced by the CoTab logo (a cream C with a mustard T inside, on green) on Android and iOS. Android 8+ uses an adaptive icon (`mipmap-anydpi-v26/ic_launcher.xml`). The sign-in and sign-up screens show the same logo (`assets/images/logo.png`). The design is saved as `docs/logo.svg`.
+- Tests: the light and dark theme, and that the app switches when the theme mode changes.
+
+## 2026-11-15 — Add expense screen, expense list and balances (Enes Çelik)
+
+- New add expense screen: title, amount, who paid (me by default), category, date (today by default) and the split. Equal split: tick who shares it and see each share right away. Percent and amount split: one field per member and a running total that turns from red to green when it is right.
+- Group screen: an "Add expense" button, the members now show their balance (green "gets back", red "owes", grey "settled up"), and the expense list replaces the placeholder. Press and hold an expense to delete it (soft delete). Pull to refresh sends my changes and downloads the latest data.
+- `lib/utils/money.dart`: `parseMoney` reads typed amounts (comma or dot) into kuruş, `formatMoney` shows them as `1.250,50 ₺`.
+- `lib/utils/expense_categories.dart`: the five categories with their names and icons.
+- New widgets `MemberBalanceTile` and `ExpenseTile` in `lib/widgets/`.
+- Theme: the background is cream now; all other colors still come from the teal seed color.
+- English and Turkish texts for the new screens. Removed the unused `expensesPlaceholder` text.
+- Not in the MVP: editing an expense (delete and add it again instead) and dark mode.
+- Tests: `parseMoney`/`formatMoney`, and the add expense form (empty fields, equal shares, percentages that are not 100).
+
+## 2026-11-15 — Splitting, balances and expense service (Enes Çelik)
+
+- `lib/utils/split_calculator.dart`: equal and percentage splits in kuruş. The leftover kuruş go to the payer, so the shares always add up to the total (100 TL / 3 = 33.34 + 33.33 + 33.33). Checks for "percentages add up to 100" and "exact amounts add up to the total".
+- `lib/utils/balance_calculator.dart`: balance of each member = what they paid − their shares. Positive means the others owe them.
+- `ExpenseService` (`lib/services/expense_service.dart`): add an expense with its shares, read the expenses and shares of a group, and soft-delete an expense with its shares. Everything is saved with `SyncService.saveRow`.
+- `SyncService.pushPending` now reads the queue again until it is empty. Before, rows saved while a push was running (the shares saved right after their expense) stayed in the queue until the next full sync.
+- Tests: equal and percentage splits, leftover kuruş, the checks, and balances.
+
+## 2026-11-15 — Expense tables and models (Enes Çelik)
+
+- Database version 3: new tables `expenses`, `expense_items`, `expense_shares` and `settlements`. Old databases get them through `onUpgrade`.
+- Every new table has `group_id`, so it can be downloaded per group, and all amounts are in kuruş.
+- `expense_shares` stores only the final amount of each person, also for percentage splits.
+- `expense_items` (receipt items) and `settlements` ("I paid you back") are not used yet; they are added now so we do not need another database version later.
+- Added the four tables to `SyncService.groupTables`.
+- Added the models `Expense`, `ExpenseShare`, `ExpenseItem` and `Settlement` with `toMap`/`fromMap`. The share id is `expenseId_userId`, so editing an expense does not create a second share for the same person.
+- `GroupService.getMembers` now also returns `user_id`; the split screen needs it to connect each share to a member.
+- Tests: map round trips and column names of the four models.
+
 ## 2026-11-15 — Team notes (Ahmet Anıl Çay)
 
 - Added `docs/Ekip_Notlari.md` (Turkish) with the setup steps teammates need: Flutter and Java versions, Kotlin upgrade, Firebase configuration.

@@ -41,6 +41,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get signOutTooltip => 'Çıkış yap';
 
   @override
+  String get appTagline =>
+      'Ortak harcamalar, alışveriş ve ev işleri tek yerde.';
+
+  @override
+  String get darkModeTooltip => 'Koyu mod';
+
+  @override
+  String get lightModeTooltip => 'Açık mod';
+
+  @override
   String get nameLabel => 'Ad';
 
   @override
@@ -157,7 +167,126 @@ class AppLocalizationsTr extends AppLocalizations {
   String get memberRoleAdmin => 'Yönetici';
 
   @override
-  String get expensesPlaceholder => 'Harcamalar yakında burada görünecek.';
+  String get addExpenseTitle => 'Harcama ekle';
+
+  @override
+  String get expenseTitleLabel => 'Başlık';
+
+  @override
+  String get expenseTitleRequired => 'Lütfen bir başlık yaz.';
+
+  @override
+  String get amountLabel => 'Tutar (₺)';
+
+  @override
+  String get amountInvalid => 'Lütfen geçerli bir tutar yaz, ör. 250,50.';
+
+  @override
+  String get paidByLabel => 'Ödeyen';
+
+  @override
+  String get categoryLabel => 'Kategori';
+
+  @override
+  String get categoryFood => 'Yemek ve market';
+
+  @override
+  String get categoryRent => 'Kira';
+
+  @override
+  String get categoryBills => 'Faturalar';
+
+  @override
+  String get categoryTransport => 'Ulaşım';
+
+  @override
+  String get categoryOther => 'Diğer';
+
+  @override
+  String get expenseDateLabel => 'Tarih';
+
+  @override
+  String get splitLabel => 'Nasıl bölüşülsün?';
+
+  @override
+  String get splitEqual => 'Eşit';
+
+  @override
+  String get splitPercentage => 'Yüzde';
+
+  @override
+  String get splitExact => 'Tutar';
+
+  @override
+  String splitPercentTotal(int total) {
+    return 'Toplam: %$total / %100';
+  }
+
+  @override
+  String splitExactTotal(String total, String amount) {
+    return 'Toplam: $total / $amount';
+  }
+
+  @override
+  String get splitErrorNobody => 'En az bir kişi seç.';
+
+  @override
+  String get splitErrorPercent => 'Yüzdelerin toplamı 100 olmalı.';
+
+  @override
+  String get splitErrorExact =>
+      'Tutarların toplamı harcama tutarına eşit olmalı.';
+
+  @override
+  String get saveExpenseButton => 'Harcamayı kaydet';
+
+  @override
+  String get expensesTitle => 'Harcamalar';
+
+  @override
+  String get expensesDeleteHint => 'Silmek için harcamaya basılı tut.';
+
+  @override
+  String get noExpenses =>
+      'Henüz harcama yok. İlkini eklemek için \"Harcama ekle\"ye dokun.';
+
+  @override
+  String expensePaidBy(String name, String date) {
+    return '$name ödedi · $date';
+  }
+
+  @override
+  String get unknownMember => 'Bilinmeyen';
+
+  @override
+  String balanceGetsBack(String amount) {
+    return '$amount alacaklı';
+  }
+
+  @override
+  String balanceOwes(String amount) {
+    return '$amount borçlu';
+  }
+
+  @override
+  String get balanceSettled => 'hesap kapalı';
+
+  @override
+  String get deleteExpenseTitle => 'Bu harcama silinsin mi?';
+
+  @override
+  String deleteExpenseMessage(String title) {
+    return '\"$title\" gruptaki herkes için silinecek.';
+  }
+
+  @override
+  String get deleteButton => 'Sil';
+
+  @override
+  String get cancelButton => 'Vazgeç';
+
+  @override
+  String get expenseDeleted => 'Harcama silindi.';
 
   @override
   String get offlineShowingSavedData =>

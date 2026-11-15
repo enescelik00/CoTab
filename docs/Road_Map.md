@@ -1,6 +1,6 @@
 # CoTab — Yol Haritası
 
-Son güncelleme: 1 Kasım 2026 · Enes Çelik
+Son güncelleme: 15 Kasım 2026 · Enes Çelik
 
 ## Özet ve takvim
 
@@ -27,7 +27,7 @@ Bu tarihler ekip içi takip içindir. Hocaya giden dokümanda aşamalar yalnızc
 | --- | --- | --- |
 | Çekirdek sürüm (MVP) | Kayıt/giriş; grup oluşturma ve davet koduyla katılma; manuel harcama ekleme; eşit, yüzde ve tutar bazlı bölüştürme; kişi bakiyeleri; harcama geçmişi; SQLite'ta offline kayıt + sunucuya senkron | 22 Kasım |
 | Genişletilmiş sürüm | Fiş tarama (OCR) ve kalem bazlı bölüştürme; QR ile gruba katılma; borç sadeleştirme ve "ödeme yaptım" kaydı; nöbet çizelgesi (rotasyon + hatırlatma bildirimi); ortak alışveriş listesi (gerçek zamanlı); alınan ürünün tek dokunuşla harcamaya dönüşmesi; Türkçe dil seçeneği | 25 Aralık |
-| Opsiyonel | Aylık harcama grafikleri ve kategori istatistikleri; seyahat için döviz desteği; tekrarlayan harcamalar (kira, internet); karanlık mod; Play Store kapalı test yayını | Zaman kalırsa |
+| Opsiyonel | Aylık harcama grafikleri ve kategori istatistikleri; seyahat için döviz desteği; tekrarlayan harcamalar (kira, internet); ~~karanlık mod~~ (15 Kasım'da yapıldı); Play Store kapalı test yayını | Zaman kalırsa |
 
 **Splitwise'tan farkımız (sunumda öne çıkarılacak):**
 
@@ -44,16 +44,17 @@ Kod öğrenci seviyesinde ve sade tutulur: ek mimari katmanı, kod üretimi gere
 | Katman | Kullanılan | Not |
 | --- | --- | --- |
 | Arayüz | Flutter + Material 3 | Ekranlar lib/screens, ortak parçalar lib/widgets altında |
-| Durum yönetimi | StatefulWidget + setState | Ek paket yok |
+| Tasarım | lib/utils/app_theme.dart | Orman yeşili + krem + tek hardal vurgu, Plus Jakarta Sans fontu (assets/fonts), açık/koyu mod. Kurallar CLAUDE.md'de "Design rules" bölümünde, logo docs/logo.svg |
+| Durum yönetimi | StatefulWidget + setState | Ek paket yok. Tek istisna: açık/koyu mod bütün uygulamayı etkilediği için Flutter'ın kendi ValueNotifier'ı kullanılıyor |
 | Navigasyon | Navigator.push | Flutter'ın kendi yöntemi |
 | Yerel veritabanı | sqflite + path, düz SQL | DatabaseHelper sınıfı lib/services altında |
-| Uzak sunucu | firebase\_auth, cloud\_firestore | Ahmet Anıl'ın branch'inde eklenecek |
+| Uzak sunucu | firebase\_auth, cloud\_firestore | Eklendi (Ahmet Anıl Çay); senkron SyncService ile |
 | Fiş okuma | google\_mlkit\_text\_recognition | Faz 2'de eklenecek |
 | Kamera | image\_picker | Faz 1'de ham metin denemesi için |
 | Bildirim | flutter\_local\_notifications | Nöbet hatırlatmaları, Faz 2 |
 | QR ile davet | qr\_flutter (üretme) + mobile\_scanner (okuma) | Faz 2'de eklenecek |
 | Dil desteği | flutter\_localizations + intl, ARB dosyaları | İngilizce varsayılan, Türkçe ikinci dil |
-| Test | flutter\_test | Ana ekran testi hazır |
+| Test | flutter\_test | Modeller, bölüştürme, bakiye, para biçimi, senkron kuralları, form ekranları ve tema için birim ve widget testleri |
 
 Kural: yukarıdakiler dışında paket eklemeden önce ekipte konuşulur. Klasör yapısı: lib/models, lib/screens, lib/services, lib/widgets, lib/utils. Kurallar depodaki CLAUDE.md'de, değişiklikler CHANGELOG'da.
 
@@ -68,14 +69,17 @@ sync\_queue dışındaki her tabloda ayrıca iki kolon bulunur: updated\_at (son
 | users | id, ad, e-posta, avatar |
 | groups | id, ad, tür (ev/seyahat), para birimi, davet kodu |
 | group\_members | group\_id, user\_id, rol, katılma tarihi |
-| expenses | id, group\_id, ödeyen, tutar, kategori, tarih, fiş görseli (telefondaki dosya yolu), bölüştürme tipi |
-| expense\_items | id, expense\_id, ürün adı, tutar (fişten gelen kalemler) |
-| expense\_shares | expense\_id veya item\_id, user\_id, pay tutarı |
+| expenses | id, group\_id, başlık, ödeyen, tutar, kategori, tarih, fiş görseli (telefondaki dosya yolu), bölüştürme tipi |
+| expense\_items | id, group\_id, expense\_id, ürün adı, tutar (fişten gelen kalemler) |
+| expense\_shares | id (expenseId\_userId), group\_id, expense\_id, item\_id (yalnızca kalem payında), user\_id, pay tutarı |
 | settlements | id, group\_id, ödeyen, alan, tutar, tarih |
 | chores | id, group\_id, ad, tekrar sıklığı, rotasyon sırası |
 | chore\_assignments | chore\_id, user\_id, tarih, tamamlandı mı |
 | shopping\_items | id, group\_id, ad, ekleyen, alındı mı, bağlı harcama |
-| sync\_queue | tablo, kayıt id, işlem tipi, zaman damgası (yalnızca yerelde) |
+| sync\_queue | tablo, kayıt id, zaman damgası (yalnızca yerelde) |
+| settings | anahtar, değer; açık/koyu mod seçimi (yalnızca yerelde, senkron edilmez) |
+
+Senkronlanan her tabloda group\_id bulunur; gruba ait veriler bu sütunla indirilir. Veritabanı şu an sürüm 4: sürüm 1 users ve groups, sürüm 2 group\_members ve sync\_queue, sürüm 3 harcama tabloları ve settlements, sürüm 4 settings. Sıradaki tablo değişikliği (chores, shopping\_items) sürüm 5 olur.
 
 **Kilit algoritmalar:**
 
@@ -109,26 +113,29 @@ Beş faz ve üç kapı var: çekirdek sürüm (22 Kasım), özellik dondurma (25
 - [x] Proje adı: CoTab; public GitHub deposu (enescelik00/CoTab) ve README
 - [x] Teknoloji kararı: Flutter + Dart, sade kod (setState, sqflite, Navigator)
 - [x] Flutter proje iskeleti: klasör yapısı, DatabaseHelper (users, groups), Material 3 tema, İngilizce/Türkçe l10n, CLAUDE.md ve CHANGELOG (Enes Çelik)
-- [ ] İskeletin main'e commit edilip push edilmesi; arkadaşların klonlayıp flutter run ile denemesi
-- [ ] Enes Yahya ve Ahmet Anıl'ın collaborator olarak eklenmesi, ardından main'in korumaya alınması
-- [ ] Firebase projesi, Auth ve Firestore kurulumu (Ahmet Anıl Çay)
-- [ ] Figma'da 8–10 ekranlık tel kafes: giriş, grup listesi, grup detayı, harcama ekle, fiş tara, bakiyeler, nöbet, alışveriş listesi (herkes)
+- [x] İskeletin main'e commit edilip push edilmesi; arkadaşların klonlayıp flutter run ile denemesi
+- [ ] Enes Yahya ve Ahmet Anıl'ın collaborator olarak eklenmesi, ardından main'in korumaya alınması (Ahmet Anıl eklendi; Enes Yahya ve main koruması kontrol edilecek)
+- [x] Firebase projesi, Auth ve Firestore kurulumu (Ahmet Anıl Çay)
+- [x] Tasarım: Figma tel kafesi yerine tasarım doğrudan uygulamada yapıldı; renkler, font ve bileşen stilleri lib/utils/app_theme.dart'ta, logo docs/logo.svg'de (Enes Çelik)
 
 ### Faz 1 — Çekirdek MVP (2–22 Kasım, vize dönemi dahil)
 
-- group\_members, expenses ve expense\_shares tablolarının DatabaseHelper'a eklenmesi; model sınıfları (toMap/fromMap) (Enes Çelik)
-- Grup oluşturma ve davet koduyla katılma (Ahmet Anıl Çay)
-- Harcama ekleme, eşit/yüzde/tutar bölüştürme, bakiye ekranı (Enes Çelik)
-- Kayıt ve giriş, Firestore'a temel senkron (Ahmet Anıl Çay)
-- Kamera ekranı ve ML Kit ile ham metin çıkarma denemesi (Enes Yahya Bodur)
-- **İlk tur sunumu (8. hafta, 16–20 Kasım):** amaç, kapsam, ekip, iş planı ve o ana kadarki ekran görüntüleri
-- **Kapı 1 (22 Kasım):** iki gerçek telefonda aynı grubu gören, harcama ekleyip bakiye hesaplayan çekirdek sürüm
+- [x] group\_members tablosu (Ahmet Anıl Çay); expenses, expense\_items, expense\_shares ve settlements tabloları, model sınıfları (toMap/fromMap) (Enes Çelik)
+- [x] Grup oluşturma ve davet koduyla katılma (Ahmet Anıl Çay)
+- [x] Harcama ekleme, eşit/yüzde/tutar bölüştürme, harcama listesi ve silme, kişi bakiyeleri (Enes Çelik)
+- [x] Kayıt ve giriş, Firestore'a offline-first senkron (Ahmet Anıl Çay)
+- [x] Uygulama teması, logo ve açık/koyu mod (Enes Çelik)
+- [ ] Kamera ekranı ve ML Kit ile ham metin çıkarma denemesi (Enes Yahya Bodur)
+- [ ] enes branch'inin PR ile main'e alınması (Enes Çelik; inceleme: Ahmet Anıl Çay veya Enes Yahya Bodur)
+- [ ] **İlk tur sunumu (8. hafta, 16–20 Kasım):** amaç, kapsam, ekip, iş planı ve o ana kadarki ekran görüntüleri
+- [ ] **Kapı 1 (22 Kasım):** iki gerçek telefonda aynı grubu gören, harcama ekleyip bakiye hesaplayan çekirdek sürüm. Kod hazır; iki cihazla test bekliyor
 
 ### Faz 2 — Ek modüller (23 Kasım–11 Aralık)
 
 - Fiş ayrıştırma (toplam, tarih, kalemler) ve düzenlenebilir onay ekranı (Enes Yahya Bodur)
 - Kalem bazlı bölüştürme arayüzü (Enes Yahya Bodur + Enes Çelik)
 - Borç sadeleştirme algoritması, birim testleri, "ödeme yaptım" akışı (Enes Çelik)
+- Harcama düzenleme; çekirdek sürümde yalnızca ekleme ve silme var (Enes Çelik)
 - Nöbet çizelgesi, rotasyon ve hatırlatma bildirimleri (Ahmet Anıl Çay)
 - Ortak alışveriş listesi, gerçek zamanlı güncelleme (Ahmet Anıl Çay)
 - QR ile gruba katılma: qr\_flutter ile kod üretme, mobile\_scanner ile okuma (Ahmet Anıl Çay)
@@ -160,10 +167,10 @@ Dokuz maddenin sekizi zorunlu; hepsi yukarıdaki fazlara bağlandı.
 | --- | --- | --- | --- |
 | 1 | Başlık, kapsam, iş planı dokümanı | Proje Başlığı, Kapsam ve İş Planı dokümanı (CoTab) | Hazır |
 | 2 | Yürütücü ve organizasyon şeması | Dokümanın 7. bölümü: şema ve görev tablosu | Hazır |
-| 3 | Public GitHub, herkes katkıcı, kişi başı en az %5 kod | github.com/enescelik00/CoTab; her üye kendi modülünde PR açar | Depo açık, collaborator ve ilk commit'ler bekliyor |
+| 3 | Public GitHub, herkes katkıcı, kişi başı en az %5 kod | github.com/enescelik00/CoTab; her üye kendi modülünde PR açar | Enes Çelik ve Ahmet Anıl Çay katkı veriyor; Enes Yahya Bodur'un ilk PR'ı bekleniyor |
 | 4 | Haftalık ilerleme raporu ve sırayla sunum | Haftalık rutin bölümündeki şablon | Her hafta |
 | 5 | Halkla ilişkiler sorumlusu ve tanıtım | Ahmet Anıl Çay; blog, YouTube, LinkedIn takvimi | İlk paylaşım ilk tur sunumuyla |
-| 6 | SQLite ve/veya uzak sunucu | İkisi birden: sqflite (SQLite) + Cloud Firestore | Faz 1 |
+| 6 | SQLite ve/veya uzak sunucu | İkisi birden: sqflite (SQLite) + Cloud Firestore | Çalışıyor |
 | 7 | Ara prototip, final sunumu, final videosu | Kapı 1 (çekirdek sürüm) ve Kapı 3 | 22 Kasım, son ders |
 | 8 | Proje raporu, süreçteki tüm dosyalar dahil | Tüm dokümanlar repo içinde /docs klasöründe | Faz 4 |
 | 9 | (Opsiyonel) Mağazada yayın | Play Store kapalı test | Zaman kalırsa |
@@ -222,19 +229,18 @@ En büyük iki risk kapsamın şişmesi ve fiş okumanın beklenenden zayıf ç�
 | Firebase ücretsiz kota veya yapılandırma sorunları | Düşük | Spark planı bu ölçek için yeterli; okuma sayısını azaltmak için yerel önbellek zaten SQLite |
 | Demo günü canlı hata | Orta | Kapı 2 sonrası kararlı APK etiketlenir; demo için hazır test grubu ve örnek fişler; yedek ekran kaydı |
 
-## Sıradaki adımlar (vize dönemi, 2–13 Kasım)
+## Sıradaki adımlar (8. hafta, 16–22 Kasım)
 
-Vize döneminde tempo düşük olacak; amaç 8. haftadaki ilk tur sunumuna depoyu dolu ve birkaç ekranı çalışır halde götürmek.
+Çekirdek sürümün kodu hazır. Bu haftanın amacı onu iki cihazda doğrulamak, main'e almak ve ilk tur sunumunu yapmak.
 
-- [x] Kapsam ve iş planı dokümanını hocaya gönder (Enes Çelik)
+Vize döneminde tamamlananlar: kapsam dokümanı hocaya gönderildi, iskelet main'e alındı, Firebase kuruldu, giriş, gruplar, senkron ve harcama modülü yazıldı.
+
+- [ ] Kapı 1 testi: iki cihazda aynı gruba gir, harcama ekle, bakiyelerin iki tarafta da doğru olduğunu ve internetsiz eklenen harcamanın sonradan gittiğini kontrol et (Enes Çelik + Ahmet Anıl Çay)
+- [ ] enes branch'i için main'e PR aç, incelet ve birleştir (Enes Çelik)
+- [ ] Ahmet Anıl'a haber ver: veritabanı sürüm 4 oldu (onun tabloları sürüm 5), SyncService.pushPending ve GroupService.getMembers değişti, ana ekran, giriş ve grup ekranları yeni temaya geçti (Enes Çelik)
 - [ ] İlk haftalık raporda iş planından farkları bildir: iskeletin sahibi ve sadeleştirilen teknik yığın (Enes Çelik)
-- [ ] İskeleti main'e commit edip push et (Enes Çelik)
-- [ ] Enes Yahya ve Ahmet Anıl'ı GitHub'da collaborator olarak ekle, main'i korumaya al (Enes Çelik)
-- [ ] Projeyi klonla, flutter pub get ve flutter run ile kurulumu doğrula (Enes Yahya Bodur, Ahmet Anıl Çay)
-- [ ] Firebase projesini aç, FlutterFire ile bağla; ayrı branch'te PR aç (Ahmet Anıl Çay)
+- [ ] İlk tur sunumu slaytları: problem, çözüm, Splitwise'tan farkı, kapsam, ekip, iş planı, ekran görüntüleri (herkes)
+- [ ] Enes Yahya'nın collaborator olduğunu ve main'in korumada olduğunu kontrol et (Enes Çelik)
+- [ ] GitHub Projects panosunu aç, Faz 2 görevlerini Issue olarak gir (Enes Çelik)
 - [ ] Kamera ekranı ve ML Kit ile ham metin denemesi; ayrı branch'te PR aç (Enes Yahya Bodur)
-- [ ] DatabaseHelper'a group\_members, expenses ve expense\_shares tablolarını ekle; model sınıflarını yaz (Enes Çelik)
-- [ ] GitHub Projects panosunu aç, Faz 1 görevlerini Issue olarak gir (Enes Çelik)
-- [ ] Figma'da en az 4 ana ekranın tel kafesi: grup detayı, harcama ekle, fiş tara, bakiyeler (herkes)
-- [ ] İlk tur sunumu slaytları: problem, çözüm, Splitwise'tan farkı, kapsam, ekip, iş planı, ekran görüntüleri (8. hafta öncesi)
 - [ ] İlk blog/LinkedIn yazısının taslağı (Ahmet Anıl Çay)

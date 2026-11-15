@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../utils/auth_error_message.dart';
 import '../utils/validators.dart';
+import '../widgets/app_logo_header.dart';
 import 'sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -116,12 +117,8 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                texts.appTitle,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 24),
+              const AppLogoHeader(),
+              const SizedBox(height: 32),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(labelText: texts.emailLabel),

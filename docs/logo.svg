@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- CoTab logo: a cream C with a mustard T inside (Co + Tab) on forest green.
+       The app icons in android/ and ios/ were drawn from this design.
+       It can be used in reports and presentations. -->
+  <rect width="512" height="512" rx="116" fill="#2E6B4A"/>
+  <path d="M347.9,164.1 A130,130 0 1 0 347.9,347.9" fill="none" stroke="#F8F3E6" stroke-width="52" stroke-linecap="round"/>
+  <rect x="196" y="200" width="124" height="36" rx="18" fill="#E3AB2E"/>
+  <rect x="240" y="200" width="36" height="120" rx="18" fill="#E3AB2E"/>
+</svg>

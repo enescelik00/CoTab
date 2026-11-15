@@ -5,6 +5,7 @@ import '../models/group.dart';
 import '../services/auth_service.dart';
 import '../services/group_service.dart';
 import '../services/sync_service.dart';
+import '../services/theme_service.dart';
 import 'create_group_screen.dart';
 import 'group_detail_screen.dart';
 import 'join_group_screen.dart';
@@ -123,6 +124,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildBody(AppLocalizations texts) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -133,30 +137,58 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return ListView(
         padding: const EdgeInsets.all(32),
         children: [
-          const SizedBox(height: 120),
+          const SizedBox(height: 72),
+          Center(
+            child: CircleAvatar(
+              radius: 44,
+              backgroundColor: colors.primaryContainer,
+              foregroundColor: colors.onPrimaryContainer,
+              child: const Icon(Icons.groups, size: 44),
+            ),
+          ),
+          const SizedBox(height: 24),
           Text(
             texts.homeWelcome,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
-          Text(texts.homeNoGroups, textAlign: TextAlign.center),
+          Text(
+            texts.homeNoGroups,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: colors.onSurfaceVariant),
+          ),
         ],
       );
     }
 
     return ListView.builder(
-      // Leaves room so the last group is not hidden behind the button.
-      padding: const EdgeInsets.only(bottom: 88),
+      // Leaves room at the bottom so the last group is not hidden behind
+      // the button.
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
       itemCount: _groups.length,
       itemBuilder: (context, index) {
         final group = _groups[index];
-        return ListTile(
-          leading: Icon(group.type == 'trip' ? Icons.flight : Icons.home),
-          title: Text(group.name),
-          subtitle: Text(_groupTypeText(texts, group.type)),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => _openGroup(group),
+        // One card per group, with a little space under it.
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Card(
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              leading: CircleAvatar(
+                backgroundColor: colors.primaryContainer,
+                foregroundColor: colors.onPrimaryContainer,
+                child: Icon(group.type == 'trip' ? Icons.flight : Icons.home),
+              ),
+              title: Text(group.name, style: textTheme.titleMedium),
+              subtitle: Text(_groupTypeText(texts, group.type)),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => _openGroup(group),
+            ),
+          ),
         );
       },
     );
@@ -181,11 +213,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final texts = AppLocalizations.of(context)!;
+    // True when the app is shown in dark mode right now.
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(texts.appTitle),
         actions: [
+          // Switches between light and dark mode with one tap. The choice
+          // is saved, so the app opens in the same mode next time.
+          IconButton(
+            icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+            tooltip: isDark ? texts.lightModeTooltip : texts.darkModeTooltip,
+            onPressed: () => ThemeService.setDarkMode(!isDark),
+          ),
           IconButton(
             icon: const Icon(Icons.group_add),
             tooltip: texts.joinGroupTitle,

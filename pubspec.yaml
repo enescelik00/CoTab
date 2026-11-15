@@ -27,3 +27,21 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+  # Images used inside the app (the logo on the sign-in screen).
+  assets:
+    - assets/images/logo.png
+
+  # The font of the app. The files are inside the project, so the font
+  # also works without internet. It is turned on in lib/utils/app_theme.dart.
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700

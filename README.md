@@ -11,11 +11,11 @@ CoTab is a mobile app for student houses and travel groups. It brings shared spe
 ## Features
 
 ### Core
-- [ ] Sign up and sign in
-- [ ] Create a group and invite members with a code
-- [ ] Add expenses and split them equally, by percentage or by exact amounts
-- [ ] Per-member balances and expense history
-- [ ] Offline-first: everything is saved locally and synced when you're back online
+- [x] Sign up and sign in
+- [x] Create a group and invite members with a code
+- [x] Add expenses and split them equally, by percentage or by exact amounts
+- [x] Per-member balances and expense history
+- [x] Offline-first: everything is saved locally and synced when you're back online
 
 ### Extended
 - [ ] **Receipt scanning (OCR):** read the date, total and VAT from Turkish market receipts, then review and correct before saving
@@ -29,7 +29,7 @@ CoTab is a mobile app for student houses and travel groups. It brings shared spe
 - [ ] Spending charts by category
 - [ ] Multiple currencies for travel groups
 - [ ] Recurring expenses (rent, internet, etc.)
-- [ ] Dark theme
+- [x] Dark theme
 
 The app is built in English with Turkish language support.
 

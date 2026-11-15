@@ -41,6 +41,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signOutTooltip => 'Sign out';
 
   @override
+  String get appTagline => 'Shared expenses, shopping and chores in one place.';
+
+  @override
+  String get darkModeTooltip => 'Dark mode';
+
+  @override
+  String get lightModeTooltip => 'Light mode';
+
+  @override
   String get nameLabel => 'Name';
 
   @override
@@ -157,7 +166,125 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberRoleAdmin => 'Admin';
 
   @override
-  String get expensesPlaceholder => 'Expenses will appear here soon.';
+  String get addExpenseTitle => 'Add expense';
+
+  @override
+  String get expenseTitleLabel => 'Title';
+
+  @override
+  String get expenseTitleRequired => 'Please enter a title.';
+
+  @override
+  String get amountLabel => 'Amount (₺)';
+
+  @override
+  String get amountInvalid => 'Please enter a valid amount, e.g. 250,50.';
+
+  @override
+  String get paidByLabel => 'Paid by';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get categoryFood => 'Food & groceries';
+
+  @override
+  String get categoryRent => 'Rent';
+
+  @override
+  String get categoryBills => 'Bills';
+
+  @override
+  String get categoryTransport => 'Transport';
+
+  @override
+  String get categoryOther => 'Other';
+
+  @override
+  String get expenseDateLabel => 'Date';
+
+  @override
+  String get splitLabel => 'How should it be split?';
+
+  @override
+  String get splitEqual => 'Equal';
+
+  @override
+  String get splitPercentage => 'Percent';
+
+  @override
+  String get splitExact => 'Amount';
+
+  @override
+  String splitPercentTotal(int total) {
+    return 'Total: $total% of 100%';
+  }
+
+  @override
+  String splitExactTotal(String total, String amount) {
+    return 'Total: $total of $amount';
+  }
+
+  @override
+  String get splitErrorNobody => 'Choose at least one person.';
+
+  @override
+  String get splitErrorPercent => 'The percentages must add up to 100.';
+
+  @override
+  String get splitErrorExact => 'The amounts must add up to the total.';
+
+  @override
+  String get saveExpenseButton => 'Save expense';
+
+  @override
+  String get expensesTitle => 'Expenses';
+
+  @override
+  String get expensesDeleteHint => 'Press and hold an expense to delete it.';
+
+  @override
+  String get noExpenses =>
+      'No expenses yet. Tap \"Add expense\" to add the first one.';
+
+  @override
+  String expensePaidBy(String name, String date) {
+    return '$name paid · $date';
+  }
+
+  @override
+  String get unknownMember => 'Unknown';
+
+  @override
+  String balanceGetsBack(String amount) {
+    return 'gets back $amount';
+  }
+
+  @override
+  String balanceOwes(String amount) {
+    return 'owes $amount';
+  }
+
+  @override
+  String get balanceSettled => 'settled up';
+
+  @override
+  String get deleteExpenseTitle => 'Delete this expense?';
+
+  @override
+  String deleteExpenseMessage(String title) {
+    return '\"$title\" will be deleted for everyone in the group.';
+  }
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
+  String get expenseDeleted => 'Expense deleted.';
 
   @override
   String get offlineShowingSavedData => 'You\'re offline — showing saved data';
