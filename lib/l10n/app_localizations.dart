@@ -259,6 +259,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get authErrorUnknown;
+
+  /// Floating button on the home screen that opens the create group screen.
+  ///
+  /// In en, this message translates to:
+  /// **'New group'**
+  String get homeCreateGroup;
+
+  /// Title of the join group screen and tooltip of its button on the home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Join a group'**
+  String get joinGroupTitle;
+
+  /// Title of the create group screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a group'**
+  String get createGroupTitle;
+
+  /// Label of the group name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get groupNameLabel;
+
+  /// Validation error when the group name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a group name.'**
+  String get groupNameRequired;
+
+  /// Label above the home/trip choice.
+  ///
+  /// In en, this message translates to:
+  /// **'What kind of group is it?'**
+  String get groupTypeLabel;
+
+  /// Group type for people who live together.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get groupTypeHome;
+
+  /// Group type for people who travel together.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip'**
+  String get groupTypeTrip;
+
+  /// Button that creates the group.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get createGroupButton;
+
+  /// Label of the invite code field and title of the invite code card.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite code'**
+  String get inviteCodeLabel;
+
+  /// Validation error when the invite code is not 6 characters long.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the 6-character code.'**
+  String get inviteCodeInvalidLength;
+
+  /// Hint on the join group screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask someone in the group for the invite code.'**
+  String get joinGroupHint;
+
+  /// Button that joins the group with the typed code.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get joinGroupButton;
+
+  /// Shown when no group has the typed invite code.
+  ///
+  /// In en, this message translates to:
+  /// **'No group found with this code.'**
+  String get joinErrorInvalidCode;
+
+  /// Shown when an action needs internet and there is none.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please try again.'**
+  String get errorNoInternet;
+
+  /// Shown for any other error.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get errorUnknown;
+
+  /// Text under the invite code on the group screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this code so your friends can join.'**
+  String get inviteCodeShareHint;
+
+  /// Tooltip of the button that copies the invite code.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy code'**
+  String get inviteCodeCopy;
+
+  /// Shown after the invite code was copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite code copied.'**
+  String get inviteCodeCopied;
+
+  /// Title of the member list on the group screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get membersTitle;
+
+  /// Label next to the name of the group admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get memberRoleAdmin;
+
+  /// Placeholder on the group screen until the expenses module is ready.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses will appear here soon.'**
+  String get expensesPlaceholder;
 }
 
 class _AppLocalizationsDelegate
