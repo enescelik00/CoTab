@@ -54,11 +54,11 @@ void main() {
     });
 
     test('Shares always add up to the total', () {
-      final shares = splitByPercentage(
-        12345,
-        {'ali': 33, 'ayse': 33, 'mehmet': 34},
-        'mehmet',
-      );
+      final shares = splitByPercentage(12345, {
+        'ali': 33,
+        'ayse': 33,
+        'mehmet': 34,
+      }, 'mehmet');
 
       expect(sumOf(shares), 12345);
     });

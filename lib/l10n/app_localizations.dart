@@ -386,11 +386,221 @@ abstract class AppLocalizations {
   /// **'Admin'**
   String get memberRoleAdmin;
 
-  /// Placeholder on the group screen until the expenses module is ready.
+  /// Title of the add expense screen and label of its button on the group screen.
   ///
   /// In en, this message translates to:
-  /// **'Expenses will appear here soon.'**
-  String get expensesPlaceholder;
+  /// **'Add expense'**
+  String get addExpenseTitle;
+
+  /// Label of the expense title field, e.g. 'Migros'.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get expenseTitleLabel;
+
+  /// Validation error when the expense title is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a title.'**
+  String get expenseTitleRequired;
+
+  /// Label of the amount field.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (₺)'**
+  String get amountLabel;
+
+  /// Validation error when the amount is empty, zero or not a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount, e.g. 250,50.'**
+  String get amountInvalid;
+
+  /// Label of the field that chooses who paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid by'**
+  String get paidByLabel;
+
+  /// Label of the category field.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// Expense category.
+  ///
+  /// In en, this message translates to:
+  /// **'Food & groceries'**
+  String get categoryFood;
+
+  /// Expense category.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get categoryRent;
+
+  /// Expense category: electricity, water, internet...
+  ///
+  /// In en, this message translates to:
+  /// **'Bills'**
+  String get categoryBills;
+
+  /// Expense category.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get categoryTransport;
+
+  /// Expense category.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get categoryOther;
+
+  /// Label of the expense date field.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get expenseDateLabel;
+
+  /// Label above the equal / percentage / amount choice.
+  ///
+  /// In en, this message translates to:
+  /// **'How should it be split?'**
+  String get splitLabel;
+
+  /// Split type: everybody pays the same.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal'**
+  String get splitEqual;
+
+  /// Split type: everybody pays a percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Percent'**
+  String get splitPercentage;
+
+  /// Split type: everybody pays a typed amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get splitExact;
+
+  /// Shown under the percentage fields.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: {total}% of 100%'**
+  String splitPercentTotal(int total);
+
+  /// Shown under the amount fields. Both values are formatted money.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: {total} of {amount}'**
+  String splitExactTotal(String total, String amount);
+
+  /// Shown when nobody is selected for an equal split.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one person.'**
+  String get splitErrorNobody;
+
+  /// Shown when the percentages do not add up to 100.
+  ///
+  /// In en, this message translates to:
+  /// **'The percentages must add up to 100.'**
+  String get splitErrorPercent;
+
+  /// Shown when the typed amounts do not add up to the expense amount.
+  ///
+  /// In en, this message translates to:
+  /// **'The amounts must add up to the total.'**
+  String get splitErrorExact;
+
+  /// Button that saves the new expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Save expense'**
+  String get saveExpenseButton;
+
+  /// Title of the expense list on the group screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get expensesTitle;
+
+  /// Small hint under the expenses title.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold an expense to delete it.'**
+  String get expensesDeleteHint;
+
+  /// Shown on the group screen when the group has no expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses yet. Tap \"Add expense\" to add the first one.'**
+  String get noExpenses;
+
+  /// Second line of an expense in the list.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} paid · {date}'**
+  String expensePaidBy(String name, String date);
+
+  /// Shown instead of a name when the person is not in the group anymore.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknownMember;
+
+  /// The others owe this person money.
+  ///
+  /// In en, this message translates to:
+  /// **'gets back {amount}'**
+  String balanceGetsBack(String amount);
+
+  /// This person owes money.
+  ///
+  /// In en, this message translates to:
+  /// **'owes {amount}'**
+  String balanceOwes(String amount);
+
+  /// This person owes nothing and gets nothing back.
+  ///
+  /// In en, this message translates to:
+  /// **'settled up'**
+  String get balanceSettled;
+
+  /// Title of the dialog that confirms deleting an expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this expense?'**
+  String get deleteExpenseTitle;
+
+  /// Text of the dialog that confirms deleting an expense.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" will be deleted for everyone in the group.'**
+  String deleteExpenseMessage(String title);
+
+  /// Button that confirms a deletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButton;
+
+  /// Button that closes a dialog without doing anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
+  /// Shown after an expense was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense deleted.'**
+  String get expenseDeleted;
 
   /// Shown above the group list when the server could not be reached.
   ///

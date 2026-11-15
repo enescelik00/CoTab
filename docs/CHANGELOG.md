@@ -13,6 +13,18 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Add expense screen, expense list and balances (Enes Çelik)
+
+- New add expense screen: title, amount, who paid (me by default), category, date (today by default) and the split. Equal split: tick who shares it and see each share right away. Percent and amount split: one field per member and a running total that turns from red to green when it is right.
+- Group screen: an "Add expense" button, the members now show their balance (green "gets back", red "owes", grey "settled up"), and the expense list replaces the placeholder. Press and hold an expense to delete it (soft delete). Pull to refresh sends my changes and downloads the latest data.
+- `lib/utils/money.dart`: `parseMoney` reads typed amounts (comma or dot) into kuruş, `formatMoney` shows them as `1.250,50 ₺`.
+- `lib/utils/expense_categories.dart`: the five categories with their names and icons.
+- New widgets `MemberBalanceTile` and `ExpenseTile` in `lib/widgets/`.
+- Theme: the background is cream now; all other colors still come from the teal seed color.
+- English and Turkish texts for the new screens. Removed the unused `expensesPlaceholder` text.
+- Not in the MVP: editing an expense (delete and add it again instead) and dark mode.
+- Tests: `parseMoney`/`formatMoney`, and the add expense form (empty fields, equal shares, percentages that are not 100).
+
 ## 2026-11-15 — Splitting, balances and expense service (Enes Çelik)
 
 - `lib/utils/split_calculator.dart`: equal and percentage splits in kuruş. The leftover kuruş go to the payer, so the shares always add up to the total (100 TL / 3 = 33.34 + 33.33 + 33.33). Checks for "percentages add up to 100" and "exact amounts add up to the total".

@@ -197,9 +197,185 @@
   "@memberRoleAdmin": {
     "description": "Label next to the name of the group admin."
   },
-  "expensesPlaceholder": "Expenses will appear here soon.",
-  "@expensesPlaceholder": {
-    "description": "Placeholder on the group screen until the expenses module is ready."
+  "addExpenseTitle": "Add expense",
+  "@addExpenseTitle": {
+    "description": "Title of the add expense screen and label of its button on the group screen."
+  },
+  "expenseTitleLabel": "Title",
+  "@expenseTitleLabel": {
+    "description": "Label of the expense title field, e.g. 'Migros'."
+  },
+  "expenseTitleRequired": "Please enter a title.",
+  "@expenseTitleRequired": {
+    "description": "Validation error when the expense title is empty."
+  },
+  "amountLabel": "Amount (₺)",
+  "@amountLabel": {
+    "description": "Label of the amount field."
+  },
+  "amountInvalid": "Please enter a valid amount, e.g. 250,50.",
+  "@amountInvalid": {
+    "description": "Validation error when the amount is empty, zero or not a number."
+  },
+  "paidByLabel": "Paid by",
+  "@paidByLabel": {
+    "description": "Label of the field that chooses who paid."
+  },
+  "categoryLabel": "Category",
+  "@categoryLabel": {
+    "description": "Label of the category field."
+  },
+  "categoryFood": "Food & groceries",
+  "@categoryFood": {
+    "description": "Expense category."
+  },
+  "categoryRent": "Rent",
+  "@categoryRent": {
+    "description": "Expense category."
+  },
+  "categoryBills": "Bills",
+  "@categoryBills": {
+    "description": "Expense category: electricity, water, internet..."
+  },
+  "categoryTransport": "Transport",
+  "@categoryTransport": {
+    "description": "Expense category."
+  },
+  "categoryOther": "Other",
+  "@categoryOther": {
+    "description": "Expense category."
+  },
+  "expenseDateLabel": "Date",
+  "@expenseDateLabel": {
+    "description": "Label of the expense date field."
+  },
+  "splitLabel": "How should it be split?",
+  "@splitLabel": {
+    "description": "Label above the equal / percentage / amount choice."
+  },
+  "splitEqual": "Equal",
+  "@splitEqual": {
+    "description": "Split type: everybody pays the same."
+  },
+  "splitPercentage": "Percent",
+  "@splitPercentage": {
+    "description": "Split type: everybody pays a percentage."
+  },
+  "splitExact": "Amount",
+  "@splitExact": {
+    "description": "Split type: everybody pays a typed amount."
+  },
+  "splitPercentTotal": "Total: {total}% of 100%",
+  "@splitPercentTotal": {
+    "description": "Shown under the percentage fields.",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "splitExactTotal": "Total: {total} of {amount}",
+  "@splitExactTotal": {
+    "description": "Shown under the amount fields. Both values are formatted money.",
+    "placeholders": {
+      "total": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitErrorNobody": "Choose at least one person.",
+  "@splitErrorNobody": {
+    "description": "Shown when nobody is selected for an equal split."
+  },
+  "splitErrorPercent": "The percentages must add up to 100.",
+  "@splitErrorPercent": {
+    "description": "Shown when the percentages do not add up to 100."
+  },
+  "splitErrorExact": "The amounts must add up to the total.",
+  "@splitErrorExact": {
+    "description": "Shown when the typed amounts do not add up to the expense amount."
+  },
+  "saveExpenseButton": "Save expense",
+  "@saveExpenseButton": {
+    "description": "Button that saves the new expense."
+  },
+  "expensesTitle": "Expenses",
+  "@expensesTitle": {
+    "description": "Title of the expense list on the group screen."
+  },
+  "expensesDeleteHint": "Press and hold an expense to delete it.",
+  "@expensesDeleteHint": {
+    "description": "Small hint under the expenses title."
+  },
+  "noExpenses": "No expenses yet. Tap \"Add expense\" to add the first one.",
+  "@noExpenses": {
+    "description": "Shown on the group screen when the group has no expenses."
+  },
+  "expensePaidBy": "{name} paid · {date}",
+  "@expensePaidBy": {
+    "description": "Second line of an expense in the list.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "unknownMember": "Unknown",
+  "@unknownMember": {
+    "description": "Shown instead of a name when the person is not in the group anymore."
+  },
+  "balanceGetsBack": "gets back {amount}",
+  "@balanceGetsBack": {
+    "description": "The others owe this person money.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceOwes": "owes {amount}",
+  "@balanceOwes": {
+    "description": "This person owes money.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceSettled": "settled up",
+  "@balanceSettled": {
+    "description": "This person owes nothing and gets nothing back."
+  },
+  "deleteExpenseTitle": "Delete this expense?",
+  "@deleteExpenseTitle": {
+    "description": "Title of the dialog that confirms deleting an expense."
+  },
+  "deleteExpenseMessage": "\"{title}\" will be deleted for everyone in the group.",
+  "@deleteExpenseMessage": {
+    "description": "Text of the dialog that confirms deleting an expense.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteButton": "Delete",
+  "@deleteButton": {
+    "description": "Button that confirms a deletion."
+  },
+  "cancelButton": "Cancel",
+  "@cancelButton": {
+    "description": "Button that closes a dialog without doing anything."
+  },
+  "expenseDeleted": "Expense deleted.",
+  "@expenseDeleted": {
+    "description": "Shown after an expense was deleted."
   },
   "offlineShowingSavedData": "You're offline — showing saved data",
   "@offlineShowingSavedData": {
