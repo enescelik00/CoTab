@@ -158,4 +158,8 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get expensesPlaceholder => 'Harcamalar yakında burada görünecek.';
+
+  @override
+  String get offlineShowingSavedData =>
+      'Çevrimdışısın — kayıtlı veriler gösteriliyor';
 }

@@ -200,5 +200,9 @@
   "expensesPlaceholder": "Expenses will appear here soon.",
   "@expensesPlaceholder": {
     "description": "Placeholder on the group screen until the expenses module is ready."
+  },
+  "offlineShowingSavedData": "You're offline — showing saved data",
+  "@offlineShowingSavedData": {
+    "description": "Shown above the group list when the server could not be reached."
   }
 }

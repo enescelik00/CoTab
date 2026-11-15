@@ -1,14 +1,13 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../models/app_user.dart';
 import '../models/group.dart';
 import '../models/group_member.dart';
 import '../utils/invite_code.dart';
 import 'auth_service.dart';
 import 'database_helper.dart';
+import 'sync_service.dart';
 
 // Thrown by joinGroup when no group has the typed invite code.
 class InvalidInviteCodeException implements Exception {}
@@ -52,8 +51,8 @@ class GroupService {
         .doc(member.id)
         .set(member.toMap());
 
-    await _saveIfNewer('groups', group.toMap());
-    await _saveIfNewer('group_members', member.toMap());
+    await SyncService.saveIfNewer('groups', group.toMap());
+    await SyncService.saveIfNewer('group_members', member.toMap());
     return group;
   }
 
@@ -103,12 +102,12 @@ class GroupService {
           .collection('group_members')
           .doc(member.id)
           .set(member.toMap());
-      await _saveIfNewer('group_members', member.toMap());
+      await SyncService.saveIfNewer('group_members', member.toMap());
     }
 
-    await _saveIfNewer('groups', group.toMap());
-    // Also downloads my own membership if it was already on the server.
-    await refreshMembers(group.id);
+    await SyncService.saveIfNewer('groups', group.toMap());
+    // Downloads the other members (and later the expenses) of the group.
+    await SyncService.pullGroup(group.id);
     return group;
   }
 
@@ -139,9 +138,10 @@ class GroupService {
     return groups;
   }
 
-  // Downloads my memberships and groups (and the members of each group)
-  // from Firestore and saves them to SQLite. Without internet it does
-  // nothing, so the screen keeps showing the local data.
+  // Downloads my memberships and my groups from Firestore and saves them
+  // to SQLite. The rest of each group is downloaded by
+  // SyncService.pullGroup. Throws without internet; SyncService.syncAll
+  // catches that, so the screen keeps showing the local data.
   static Future<void> refreshMyGroups() async {
     final userId = AuthService.currentUserId;
     if (userId == null) {
@@ -149,54 +149,22 @@ class GroupService {
     }
 
     final firestore = FirebaseFirestore.instance;
-    try {
-      final memberships = await firestore
-          .collection('group_members')
-          .where('user_id', isEqualTo: userId)
-          .get();
-
-      for (final document in memberships.docs) {
-        final member = GroupMember.fromMap(document.data());
-        await _saveIfNewer('group_members', member.toMap());
-
-        final groupDocument = await firestore
-            .collection('groups')
-            .doc(member.groupId)
-            .get();
-        if (groupDocument.exists) {
-          final group = Group.fromMap(groupDocument.data()!);
-          await _saveIfNewer('groups', group.toMap());
-        }
-
-        if (member.deletedAt == null) {
-          await refreshMembers(member.groupId);
-        }
-      }
-    } catch (error) {
-      // Probably offline. The local data is still shown.
-    }
-  }
-
-  // Downloads all memberships of a group and the users behind them, so the
-  // member names can be shown without internet later.
-  static Future<void> refreshMembers(String groupId) async {
-    final firestore = FirebaseFirestore.instance;
     final memberships = await firestore
         .collection('group_members')
-        .where('group_id', isEqualTo: groupId)
-        .get();
+        .where('user_id', isEqualTo: userId)
+        .get(_fromServer);
 
     for (final document in memberships.docs) {
       final member = GroupMember.fromMap(document.data());
-      await _saveIfNewer('group_members', member.toMap());
+      await SyncService.saveIfNewer('group_members', member.toMap());
 
-      final userDocument = await firestore
-          .collection('users')
-          .doc(member.userId)
-          .get();
-      if (userDocument.exists) {
-        final user = AppUser.fromMap(userDocument.data()!);
-        await _saveIfNewer('users', user.toMap());
+      final groupDocument = await firestore
+          .collection('groups')
+          .doc(member.groupId)
+          .get(_fromServer);
+      if (groupDocument.exists) {
+        final group = Group.fromMap(groupDocument.data()!);
+        await SyncService.saveIfNewer('groups', group.toMap());
       }
     }
   }
@@ -232,29 +200,5 @@ class GroupService {
       }
     }
     throw Exception('Could not find a free invite code.');
-  }
-
-  // "Newer wins": saves the row only if it is not in the table yet or if
-  // its updated_at is newer than the local one. The sync service will use
-  // the same rule.
-  static Future<void> _saveIfNewer(
-    String table,
-    Map<String, dynamic> row,
-  ) async {
-    final db = await DatabaseHelper.getDatabase();
-    final localRows = await db.query(
-      table,
-      columns: ['updated_at'],
-      where: 'id = ?',
-      whereArgs: [row['id']],
-    );
-    if (localRows.isNotEmpty) {
-      final localUpdatedAt = localRows.first['updated_at'] as int;
-      final remoteUpdatedAt = row['updated_at'] as int;
-      if (localUpdatedAt >= remoteUpdatedAt) {
-        return;
-      }
-    }
-    await db.insert(table, row, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

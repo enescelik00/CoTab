@@ -13,6 +13,20 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Offline sync (Ahmet Anıl Çay)
+
+- New table `sync_queue` (id, table_name, row_id, created_at): the local changes that still have to be sent to Firestore. It is added in the same database version 2 step as `group_members`, because version 2 was not released yet. It is the only table without `updated_at`/`deleted_at`, and its rows are really deleted once sent.
+- New `SyncService` (`lib/services/sync_service.dart`):
+  - `saveRow(table, row)`: writes the row to SQLite, adds it to `sync_queue` and tries to send it right away. It never fails because of a missing internet connection.
+  - `pushPending()`: sends the queued rows to Firestore, oldest first; stops at the first error and keeps the rest for later. A row queued several times is sent once.
+  - `pullGroup(groupId)`: downloads the group, the rows of every table in `groupTables` with this `group_id`, and the members' users.
+  - `syncAll()`: sends my changes, then downloads my groups and everything in them. Returns `false` when the server could not be reached.
+  - `saveIfNewer` moved here from `GroupService` ("newer wins" by `updated_at`). Downloaded rows are never put back into the queue.
+- The home screen syncs when it opens, on pull-to-refresh and when the app comes back to the foreground. Without internet it shows "You're offline — showing saved data" above the list (English and Turkish).
+- The group screen downloads the latest group data with `pullGroup` when it opens. Joining a group also uses `pullGroup`; `GroupService.refreshMembers` was removed.
+- Tests: the "is the remote row newer?" rule and picking one queue entry per row (`lib/utils/sync_rules.dart`).
+- How to use from other modules: build the row with `updated_at` set to `DateTime.now().millisecondsSinceEpoch` (and `deleted_at` to delete it, never `DELETE`), then call `SyncService.saveRow('expenses', expense.toMap())`. Add the table name to `groupTables` in `sync_service.dart`. Every synced table needs `group_id`, `updated_at` and `deleted_at` columns.
+
 ## 2026-11-15 — Groups and invite codes (Ahmet Anıl Çay)
 
 - Database version 2: new `group_members` table (id = `groupId_userId`, group_id, user_id, role, joined_at, updated_at, deleted_at). Old databases get it through `onUpgrade`. The next table change should be version 3; see the comment in `_upgradeTables` in `database_helper.dart`.
