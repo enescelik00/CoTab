@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'cotab.db';
-  static const int _databaseVersion = 2;
+  static const int _databaseVersion = 3;
 
   static Database? _database;
 
@@ -55,6 +55,7 @@ class DatabaseHelper {
     ''');
 
     await _createVersion2Tables(db);
+    await _createVersion3Tables(db);
   }
 
   // Runs when the app finds a database file from an older app version.
@@ -67,7 +68,10 @@ class DatabaseHelper {
     if (oldVersion < 2) {
       await _createVersion2Tables(db);
     }
-    // Next version goes here: if (oldVersion < 3) { ... }
+    if (oldVersion < 3) {
+      await _createVersion3Tables(db);
+    }
+    // Next version goes here: if (oldVersion < 4) { ... }
   }
 
   // Added in version 2: group_members and sync_queue.
@@ -96,6 +100,73 @@ class DatabaseHelper {
         table_name TEXT NOT NULL,
         row_id TEXT NOT NULL,
         created_at INTEGER NOT NULL
+      )
+    ''');
+  }
+
+  // Added in version 3: expenses and everything that belongs to them.
+  // Every table has group_id, so SyncService can download it per group.
+  // All amounts are in kuruş (12.50 TL is 1250).
+  static Future<void> _createVersion3Tables(Database db) async {
+    // split_type is 'equal', 'percentage' or 'exact'.
+    // category is 'food', 'rent', 'bills', 'transport' or 'other'.
+    // receipt_path is the receipt image on this phone (empty if none).
+    await db.execute('''
+      CREATE TABLE expenses (
+        id TEXT PRIMARY KEY,
+        group_id TEXT NOT NULL,
+        title TEXT NOT NULL,
+        amount INTEGER NOT NULL,
+        paid_by TEXT NOT NULL,
+        category TEXT NOT NULL,
+        expense_date INTEGER NOT NULL,
+        split_type TEXT NOT NULL,
+        receipt_path TEXT,
+        updated_at INTEGER NOT NULL,
+        deleted_at INTEGER
+      )
+    ''');
+
+    // The products on a scanned receipt (used later by receipt scanning).
+    await db.execute('''
+      CREATE TABLE expense_items (
+        id TEXT PRIMARY KEY,
+        group_id TEXT NOT NULL,
+        expense_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        amount INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL,
+        deleted_at INTEGER
+      )
+    ''');
+
+    // How much of an expense each person owes. Only the final amount is
+    // stored, also for percentage splits. item_id is set only when the
+    // share belongs to one receipt item.
+    await db.execute('''
+      CREATE TABLE expense_shares (
+        id TEXT PRIMARY KEY,
+        group_id TEXT NOT NULL,
+        expense_id TEXT NOT NULL,
+        item_id TEXT,
+        user_id TEXT NOT NULL,
+        amount INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL,
+        deleted_at INTEGER
+      )
+    ''');
+
+    // A payment between two members ("I paid you back").
+    await db.execute('''
+      CREATE TABLE settlements (
+        id TEXT PRIMARY KEY,
+        group_id TEXT NOT NULL,
+        from_user_id TEXT NOT NULL,
+        to_user_id TEXT NOT NULL,
+        amount INTEGER NOT NULL,
+        settled_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL,
+        deleted_at INTEGER
       )
     ''');
   }

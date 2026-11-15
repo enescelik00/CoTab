@@ -170,12 +170,13 @@ class GroupService {
   }
 
   // The active members of a group with their names, read from SQLite.
-  // Each row has the keys 'name' and 'role'.
+  // Each row has the keys 'user_id', 'name' and 'role'.
   static Future<List<Map<String, Object?>>> getMembers(String groupId) async {
     final db = await DatabaseHelper.getDatabase();
     return db.rawQuery(
       '''
-      SELECT users.name, group_members.role FROM group_members
+      SELECT group_members.user_id, users.name, group_members.role
+      FROM group_members
       JOIN users ON users.id = group_members.user_id
       WHERE group_members.group_id = ?
         AND group_members.deleted_at IS NULL

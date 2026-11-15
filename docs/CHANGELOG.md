@@ -13,6 +13,17 @@ Entry format:
 
 ---
 
+## 2026-11-15 — Expense tables and models (Enes Çelik)
+
+- Database version 3: new tables `expenses`, `expense_items`, `expense_shares` and `settlements`. Old databases get them through `onUpgrade`.
+- Every new table has `group_id`, so it can be downloaded per group, and all amounts are in kuruş.
+- `expense_shares` stores only the final amount of each person, also for percentage splits.
+- `expense_items` (receipt items) and `settlements` ("I paid you back") are not used yet; they are added now so we do not need another database version later.
+- Added the four tables to `SyncService.groupTables`.
+- Added the models `Expense`, `ExpenseShare`, `ExpenseItem` and `Settlement` with `toMap`/`fromMap`. The share id is `expenseId_userId`, so editing an expense does not create a second share for the same person.
+- `GroupService.getMembers` now also returns `user_id`; the split screen needs it to connect each share to a member.
+- Tests: map round trips and column names of the four models.
+
 ## 2026-11-15 — Team notes (Ahmet Anıl Çay)
 
 - Added `docs/Ekip_Notlari.md` (Turkish) with the setup steps teammates need: Flutter and Java versions, Kotlin upgrade, Firebase configuration.

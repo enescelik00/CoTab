@@ -31,9 +31,13 @@ class SyncService {
   // The tables that belong to one group. pullGroup() downloads the rows of
   // these tables where group_id is the given group, so each of them must
   // have a group_id column.
-  // Enes Çelik adds 'expenses', 'expense_items', 'expense_shares' and
-  // 'settlements' here (each with a group_id column).
-  static const List<String> groupTables = ['group_members'];
+  static const List<String> groupTables = [
+    'group_members',
+    'expenses',
+    'expense_items',
+    'expense_shares',
+    'settlements',
+  ];
 
   // Asks the server directly instead of the Firestore cache. Without
   // internet this throws, so we know that we are offline.
