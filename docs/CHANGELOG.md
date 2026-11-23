@@ -13,6 +13,10 @@ Entry format:
 
 ---
 
+## 2026-11-18 — Fix Android release OCR shrinker rules (Enes Çelik)
+
+- Load app ProGuard rules for release builds and suppress missing-class warnings for the optional non-Latin ML Kit models. Receipt scanning uses only the bundled Latin model.
+
 ## 2026-11-16 — Document receipt OCR prototype (Enes Yahya Bodur)
 
 - Updated the roadmap to show the camera, gallery and raw OCR trial as implemented while keeping receipt parsing and device accuracy checks pending.
