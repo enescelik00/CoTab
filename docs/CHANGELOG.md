@@ -13,6 +13,11 @@ Entry format:
 
 ---
 
+## 2026-11-28 — Clean up .gitignore (Enes Çelik)
+
+- Removed the rules that were copied from the Flutter SDK's own repository (`/bin/cache/`, `/dev/...`, a bare `version` rule that would hide any file named `version`) and the unused macOS, Windows and Linux sections.
+- Grouped the rest with short comments and added signing keys (`*.keystore`), `.env` and built apps (`*.apk`, `*.aab`, `*.ipa`). The same files as before are ignored; nothing that was committed is affected.
+
 ## 2026-11-28 — Debt simplification and settle up (Enes Çelik)
 
 - `lib/utils/debt_simplifier.dart`: `simplifyDebts` turns the balances of a group into a short list of suggested payments ("Ayşe pays Ali 100 TL"). The person who owes the most pays the person who gets back the most, until everybody is at 0; for n people there are at most n − 1 payments. The suggestions are calculated on the phone and not saved.
