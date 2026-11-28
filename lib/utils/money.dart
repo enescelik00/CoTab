@@ -49,6 +49,14 @@ String formatMoney(int amount) {
   return '$sign${_addThousandsDots(lira)},$kurusText ₺';
 }
 
+// For a text field that the user can change: 125050 -> '1250,50'.
+// No thousands dots and no ₺, so parseMoney can read it back.
+String formatMoneyForInput(int amount) {
+  final lira = amount ~/ 100;
+  final kurusText = (amount % 100).toString().padLeft(2, '0');
+  return '$lira,$kurusText';
+}
+
 // 1250000 -> '1.250.000'
 String _addThousandsDots(int number) {
   final digits = number.toString();

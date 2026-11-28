@@ -239,10 +239,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveExpenseButton => 'Save expense';
 
   @override
-  String get expensesTitle => 'Expenses';
+  String get expensesTitle => 'Expenses and payments';
 
   @override
-  String get expensesDeleteHint => 'Press and hold an expense to delete it.';
+  String get expensesDeleteHint => 'Press and hold a row to delete it.';
 
   @override
   String get noExpenses =>
@@ -341,6 +341,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get receiptNoText =>
       'No text was found. Try again with a clearer photo.';
+
+  @override
+  String get settleUpTitle => 'Settle up';
+
+  @override
+  String get settleUpHint => 'The fewest payments that settle everybody.';
+
+  @override
+  String get allSettledUp => 'Everybody is settled up.';
+
+  @override
+  String get markAsPaid => 'Paid';
+
+  @override
+  String get recordPaymentTitle => 'Record a payment';
+
+  @override
+  String paymentTooHigh(String amount) {
+    return 'The amount can be at most $amount.';
+  }
+
+  @override
+  String get saveButton => 'Save';
+
+  @override
+  String get paymentSaved => 'Payment saved.';
+
+  @override
+  String paymentLabel(String date) {
+    return 'Payment · $date';
+  }
+
+  @override
+  String get deletePaymentTitle => 'Delete this payment?';
+
+  @override
+  String get deletePaymentMessage =>
+      'The balances will go back to how they were before this payment.';
+
+  @override
+  String get paymentDeleted => 'Payment deleted.';
 
   @override
   String get offlineShowingSavedData => 'You\'re offline — showing saved data';

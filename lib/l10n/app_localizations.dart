@@ -542,16 +542,16 @@ abstract class AppLocalizations {
   /// **'Save expense'**
   String get saveExpenseButton;
 
-  /// Title of the expense list on the group screen.
+  /// Title of the list of expenses and payments on the group screen.
   ///
   /// In en, this message translates to:
-  /// **'Expenses'**
+  /// **'Expenses and payments'**
   String get expensesTitle;
 
   /// Small hint under the expenses title.
   ///
   /// In en, this message translates to:
-  /// **'Press and hold an expense to delete it.'**
+  /// **'Press and hold a row to delete it.'**
   String get expensesDeleteHint;
 
   /// Shown on the group screen when the group has no expenses.
@@ -715,6 +715,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No text was found. Try again with a clearer photo.'**
   String get receiptNoText;
+
+  /// Title of the card with the suggested payments on the group screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Settle up'**
+  String get settleUpTitle;
+
+  /// Small hint under the settle up title.
+  ///
+  /// In en, this message translates to:
+  /// **'The fewest payments that settle everybody.'**
+  String get settleUpHint;
+
+  /// Shown in the settle up card when nobody owes anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Everybody is settled up.'**
+  String get allSettledUp;
+
+  /// Button next to a suggested payment; opens the record payment dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get markAsPaid;
+
+  /// Title of the dialog that saves a payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a payment'**
+  String get recordPaymentTitle;
+
+  /// Error when the paid amount is higher than the suggested amount.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount can be at most {amount}.'**
+  String paymentTooHigh(String amount);
+
+  /// Button that saves a dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveButton;
+
+  /// Shown after a payment was saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment saved.'**
+  String get paymentSaved;
+
+  /// Second line of a payment in the expense list.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment · {date}'**
+  String paymentLabel(String date);
+
+  /// Title of the dialog that confirms deleting a payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this payment?'**
+  String get deletePaymentTitle;
+
+  /// Text of the dialog that confirms deleting a payment.
+  ///
+  /// In en, this message translates to:
+  /// **'The balances will go back to how they were before this payment.'**
+  String get deletePaymentMessage;
+
+  /// Shown after a payment was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment deleted.'**
+  String get paymentDeleted;
 
   /// Shown above the group list when the server could not be reached.
   ///

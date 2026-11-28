@@ -314,11 +314,11 @@
   "@saveExpenseButton": {
     "description": "Button that saves the new expense."
   },
-  "expensesTitle": "Expenses",
+  "expensesTitle": "Expenses and payments",
   "@expensesTitle": {
-    "description": "Title of the expense list on the group screen."
+    "description": "Title of the list of expenses and payments on the group screen."
   },
-  "expensesDeleteHint": "Press and hold an expense to delete it.",
+  "expensesDeleteHint": "Press and hold a row to delete it.",
   "@expensesDeleteHint": {
     "description": "Small hint under the expenses title."
   },
@@ -405,6 +405,64 @@
   "receiptOcrError": "The receipt text could not be read. Please try again.",
   "receiptRecognizedText": "Recognized text",
   "receiptNoText": "No text was found. Try again with a clearer photo.",
+  "settleUpTitle": "Settle up",
+  "@settleUpTitle": {
+    "description": "Title of the card with the suggested payments on the group screen."
+  },
+  "settleUpHint": "The fewest payments that settle everybody.",
+  "@settleUpHint": {
+    "description": "Small hint under the settle up title."
+  },
+  "allSettledUp": "Everybody is settled up.",
+  "@allSettledUp": {
+    "description": "Shown in the settle up card when nobody owes anything."
+  },
+  "markAsPaid": "Paid",
+  "@markAsPaid": {
+    "description": "Button next to a suggested payment; opens the record payment dialog."
+  },
+  "recordPaymentTitle": "Record a payment",
+  "@recordPaymentTitle": {
+    "description": "Title of the dialog that saves a payment."
+  },
+  "paymentTooHigh": "The amount can be at most {amount}.",
+  "@paymentTooHigh": {
+    "description": "Error when the paid amount is higher than the suggested amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "saveButton": "Save",
+  "@saveButton": {
+    "description": "Button that saves a dialog."
+  },
+  "paymentSaved": "Payment saved.",
+  "@paymentSaved": {
+    "description": "Shown after a payment was saved."
+  },
+  "paymentLabel": "Payment · {date}",
+  "@paymentLabel": {
+    "description": "Second line of a payment in the expense list.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "deletePaymentTitle": "Delete this payment?",
+  "@deletePaymentTitle": {
+    "description": "Title of the dialog that confirms deleting a payment."
+  },
+  "deletePaymentMessage": "The balances will go back to how they were before this payment.",
+  "@deletePaymentMessage": {
+    "description": "Text of the dialog that confirms deleting a payment."
+  },
+  "paymentDeleted": "Payment deleted.",
+  "@paymentDeleted": {
+    "description": "Shown after a payment was deleted."
+  },
   "offlineShowingSavedData": "You're offline — showing saved data",
   "@offlineShowingSavedData": {
     "description": "Shown above the group list when the server could not be reached."

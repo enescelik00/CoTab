@@ -4,18 +4,25 @@ import 'package:flutter/services.dart';
 import '../l10n/app_localizations.dart';
 import '../models/expense.dart';
 import '../models/group.dart';
+import '../models/settlement.dart';
 import '../services/auth_service.dart';
 import '../services/expense_service.dart';
 import '../services/group_service.dart';
+import '../services/settlement_service.dart';
 import '../services/sync_service.dart';
 import '../utils/balance_calculator.dart';
+import '../utils/debt_simplifier.dart';
 import '../widgets/expense_tile.dart';
 import '../widgets/member_balance_tile.dart';
+import '../widgets/settle_up_dialog.dart';
+import '../widgets/settlement_tile.dart';
+import '../widgets/suggested_payment_tile.dart';
 import 'add_expense_screen.dart';
 import 'receipt_camera_screen.dart';
 
-// Shows one group: its invite code, its members with their balances and
-// its expenses. New expenses are added with the button at the bottom.
+// Shows one group: its invite code, its members with their balances, the
+// suggested payments to settle up, and its expenses and payments.
+// New expenses are added with the button at the bottom.
 class GroupDetailScreen extends StatefulWidget {
   final Group group;
 
@@ -29,8 +36,11 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   // Each member is a map with the keys 'user_id', 'name' and 'role'.
   List<Map<String, Object?>> _members = [];
   List<Expense> _expenses = [];
+  List<Settlement> _settlements = [];
   // user id -> balance in kuruş (see balance_calculator.dart)
   Map<String, int> _balances = {};
+  // Who should pay whom to settle up (see debt_simplifier.dart).
+  List<SuggestedPayment> _suggestions = [];
 
   @override
   void initState() {
@@ -62,12 +72,18 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     final members = await GroupService.getMembers(groupId);
     final expenses = await ExpenseService.getExpenses(groupId);
     final shares = await ExpenseService.getShares(groupId);
+    final settlements = await SettlementService.getSettlements(groupId);
 
     final memberIds = <String>[];
     for (final member in members) {
       memberIds.add(member['user_id'] as String);
     }
-    final balances = calculateBalances(memberIds, expenses, shares);
+    final balances = calculateBalances(
+      memberIds,
+      expenses,
+      shares,
+      settlements: settlements,
+    );
 
     if (!mounted) {
       return;
@@ -75,7 +91,9 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     setState(() {
       _members = members;
       _expenses = expenses;
+      _settlements = settlements;
       _balances = balances;
+      _suggestions = simplifyDebts(balances);
     });
   }
 
@@ -115,15 +133,21 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     }
   }
 
-  // Asks "Delete this expense?" and deletes it if the user says yes.
-  Future<void> _confirmDelete(Expense expense) async {
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  // Shows a "Delete ...?" dialog. Returns true if the user tapped Delete.
+  Future<bool> _askToDelete(String title, String message) async {
     final texts = AppLocalizations.of(context)!;
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(texts.deleteExpenseTitle),
-        content: Text(texts.deleteExpenseMessage(expense.title)),
+        title: Text(title),
+        content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -136,16 +160,70 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         ],
       ),
     );
-    if (confirmed != true) {
+    return confirmed == true;
+  }
+
+  Future<void> _deleteExpense(Expense expense) async {
+    final texts = AppLocalizations.of(context)!;
+    final confirmed = await _askToDelete(
+      texts.deleteExpenseTitle,
+      texts.deleteExpenseMessage(expense.title),
+    );
+    if (!confirmed) {
       return;
     }
 
     await ExpenseService.deleteExpense(expense);
     await _readLocalData();
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(texts.expenseDeleted)));
+      _showMessage(texts.expenseDeleted);
+    }
+  }
+
+  Future<void> _deleteSettlement(Settlement settlement) async {
+    final texts = AppLocalizations.of(context)!;
+    final confirmed = await _askToDelete(
+      texts.deletePaymentTitle,
+      texts.deletePaymentMessage,
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    await SettlementService.deleteSettlement(settlement);
+    await _readLocalData();
+    if (mounted) {
+      _showMessage(texts.paymentDeleted);
+    }
+  }
+
+  // "Paid" was tapped on a suggested payment: asks how much was paid and
+  // saves it as a settlement. The balances and suggestions are then
+  // calculated again, so the paid suggestion gets smaller or disappears.
+  Future<void> _recordPayment(SuggestedPayment suggestion) async {
+    final texts = AppLocalizations.of(context)!;
+
+    final amount = await showDialog<int>(
+      context: context,
+      builder: (context) => SettleUpDialog(
+        fromName: _memberName(suggestion.fromUserId),
+        toName: _memberName(suggestion.toUserId),
+        suggestedAmount: suggestion.amount,
+      ),
+    );
+    if (amount == null) {
+      return;
+    }
+
+    await SettlementService.addSettlement(
+      groupId: widget.group.id,
+      fromUserId: suggestion.fromUserId,
+      toUserId: suggestion.toUserId,
+      amount: amount,
+    );
+    await _readLocalData();
+    if (mounted) {
+      _showMessage(texts.paymentSaved);
     }
   }
 
@@ -203,9 +281,17 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                   ],
                 ),
               ),
+            // Settling up only makes sense once something was spent.
+            if (_expenses.isNotEmpty || _settlements.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              Text(texts.settleUpTitle, style: textTheme.titleMedium),
+              Text(texts.settleUpHint, style: textTheme.bodySmall),
+              const SizedBox(height: 8),
+              _buildSettleUpCard(texts),
+            ],
             const SizedBox(height: 24),
             Text(texts.expensesTitle, style: textTheme.titleMedium),
-            if (_expenses.isEmpty)
+            if (_expenses.isEmpty && _settlements.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Text(texts.noExpenses, textAlign: TextAlign.center),
@@ -213,23 +299,85 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
             else ...[
               Text(texts.expensesDeleteHint, style: textTheme.bodySmall),
               const SizedBox(height: 8),
-              Card(
-                child: Column(
-                  children: [
-                    for (final expense in _expenses)
-                      ExpenseTile(
-                        expense: expense,
-                        payerName: _memberName(expense.paidBy),
-                        onLongPress: () => _confirmDelete(expense),
-                      ),
-                  ],
-                ),
-              ),
+              Card(child: Column(children: _buildHistoryTiles())),
             ],
           ],
         ),
       ),
     );
+  }
+
+  // The suggested payments, or "Everybody is settled up."
+  Widget _buildSettleUpCard(AppLocalizations texts) {
+    if (_suggestions.isEmpty) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(texts.allSettledUp, textAlign: TextAlign.center),
+        ),
+      );
+    }
+
+    return Card(
+      child: Column(
+        children: [
+          for (final suggestion in _suggestions)
+            SuggestedPaymentTile(
+              fromName: _memberName(suggestion.fromUserId),
+              toName: _memberName(suggestion.toUserId),
+              amount: suggestion.amount,
+              onPaid: () => _recordPayment(suggestion),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Expenses and payments in one list, newest first.
+  // Both lists are already sorted newest first, so we walk through them
+  // together and always take the newer of the two next rows.
+  List<Widget> _buildHistoryTiles() {
+    final tiles = <Widget>[];
+    int expenseIndex = 0;
+    int settlementIndex = 0;
+
+    while (expenseIndex < _expenses.length ||
+        settlementIndex < _settlements.length) {
+      bool takeExpense;
+      if (settlementIndex >= _settlements.length) {
+        takeExpense = true; // only expenses are left
+      } else if (expenseIndex >= _expenses.length) {
+        takeExpense = false; // only payments are left
+      } else {
+        final expenseDate = _expenses[expenseIndex].expenseDate;
+        final settlementDate = _settlements[settlementIndex].settledAt;
+        takeExpense = expenseDate >= settlementDate;
+      }
+
+      if (takeExpense) {
+        final expense = _expenses[expenseIndex];
+        tiles.add(
+          ExpenseTile(
+            expense: expense,
+            payerName: _memberName(expense.paidBy),
+            onLongPress: () => _deleteExpense(expense),
+          ),
+        );
+        expenseIndex++;
+      } else {
+        final settlement = _settlements[settlementIndex];
+        tiles.add(
+          SettlementTile(
+            settlement: settlement,
+            fromName: _memberName(settlement.fromUserId),
+            toName: _memberName(settlement.toUserId),
+            onLongPress: () => _deleteSettlement(settlement),
+          ),
+        );
+        settlementIndex++;
+      }
+    }
+    return tiles;
   }
 
   Widget _buildInviteCodeCard(AppLocalizations texts, TextTheme textTheme) {

@@ -1,6 +1,6 @@
 # CoTab — Yol Haritası
 
-Son güncelleme: 16 Kasım 2026 · Enes Yahya Bodur
+Son güncelleme: 28 Kasım 2026 · Enes Çelik
 
 ## Özet ve takvim
 
@@ -126,16 +126,17 @@ Beş faz ve üç kapı var: çekirdek sürüm (22 Kasım), özellik dondurma (25
 - [x] Kayıt ve giriş, Firestore'a offline-first senkron (Ahmet Anıl Çay)
 - [x] Uygulama teması, logo ve açık/koyu mod (Enes Çelik)
 - [x] Kamera/galeriden fiş fotoğrafı seçme, önizleme ve ML Kit ile ham metin çıkarma denemesi (Enes Yahya Bodur; gerçek fişte metin görüldü, doğruluk ölçümü bekliyor)
-- [ ] enes branch'inin PR ile main'e alınması (Enes Çelik; inceleme: Ahmet Anıl Çay veya Enes Yahya Bodur)
-- [ ] **İlk tur sunumu (8. hafta, 16–20 Kasım):** amaç, kapsam, ekip, iş planı ve o ana kadarki ekran görüntüleri
+- [x] enes branch'inin PR ile main'e alınması (Enes Çelik; PR #6)
+- [x] **İlk tur sunumu (8. hafta, 16–20 Kasım):** amaç, kapsam, ekip, iş planı ve o ana kadarki ekran görüntüleri
 - [ ] **Kapı 1 (22 Kasım):** iki gerçek telefonda aynı grubu gören, harcama ekleyip bakiye hesaplayan çekirdek sürüm. Kod hazır; iki cihazla test bekliyor
 
 ### Faz 2 — Ek modüller (23 Kasım–11 Aralık)
 
 - Fiş ayrıştırma (toplam, tarih, kalemler) ve düzenlenebilir onay ekranı (Enes Yahya Bodur)
-- Kalem bazlı bölüştürme arayüzü (Enes Yahya Bodur + Enes Çelik)
-- Borç sadeleştirme algoritması, birim testleri, "ödeme yaptım" akışı (Enes Çelik)
-- Harcama düzenleme; çekirdek sürümde yalnızca ekleme ve silme var (Enes Çelik)
+- [ ] Kalem bazlı bölüştürme arayüzü (Enes Yahya Bodur + Enes Çelik)
+- [x] Borç sadeleştirme algoritması ve birim testleri (Enes Çelik; lib/utils/debt_simplifier.dart)
+- [x] "Ödeme yaptım" akışı: grup ekranında Hesaplaşma kartı, önerilen ödemeler, kısmi ödeme, settlements kaydı ve bakiyeye etkisi (Enes Çelik)
+- [ ] Harcama düzenleme; çekirdek sürümde yalnızca ekleme ve silme var (Enes Çelik)
 - Nöbet çizelgesi, rotasyon ve hatırlatma bildirimleri (Ahmet Anıl Çay)
 - Ortak alışveriş listesi, gerçek zamanlı güncelleme (Ahmet Anıl Çay)
 - QR ile gruba katılma: qr\_flutter ile kod üretme, mobile\_scanner ile okuma (Ahmet Anıl Çay)
@@ -236,12 +237,12 @@ En büyük iki risk kapsamın şişmesi ve fiş okumanın beklenenden zayıf ç�
 Vize döneminde tamamlananlar: kapsam dokümanı hocaya gönderildi, iskelet main'e alındı, Firebase kuruldu, giriş, gruplar, senkron ve harcama modülü yazıldı.
 
 - [ ] Kapı 1 testi: iki cihazda aynı gruba gir, harcama ekle, bakiyelerin iki tarafta da doğru olduğunu ve internetsiz eklenen harcamanın sonradan gittiğini kontrol et (Enes Çelik + Ahmet Anıl Çay)
-- [ ] enes branch'i için main'e PR aç, incelet ve birleştir (Enes Çelik)
+- [x] enes branch'i için main'e PR aç ve birleştir (Enes Çelik; PR #6)
 - [ ] Ahmet Anıl'a haber ver: veritabanı sürüm 4 oldu (onun tabloları sürüm 5), SyncService.pushPending ve GroupService.getMembers değişti, ana ekran, giriş ve grup ekranları yeni temaya geçti (Enes Çelik)
 - [ ] İlk haftalık raporda iş planından farkları bildir: iskeletin sahibi ve sadeleştirilen teknik yığın (Enes Çelik)
 - [ ] İlk tur sunumu slaytları: problem, çözüm, Splitwise'tan farkı, kapsam, ekip, iş planı, ekran görüntüleri (herkes)
 - [ ] Enes Yahya'nın collaborator olduğunu ve main'in korumada olduğunu kontrol et (Enes Çelik)
 - [ ] GitHub Projects panosunu aç, Faz 2 görevlerini Issue olarak gir (Enes Çelik)
 - [x] Kamera ekranı ve ML Kit ile ham metin denemesini ayrı branch'te geliştir (Enes Yahya Bodur)
-- [ ] Fiş tarama branch'i için PR aç ve incelet (Enes Yahya Bodur)
+- [x] Fiş tarama branch'i için PR aç ve birleştir (Enes Yahya Bodur; PR #7)
 - [ ] İlk blog/LinkedIn yazısının taslağı (Ahmet Anıl Çay)

@@ -241,10 +241,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get saveExpenseButton => 'Harcamayı kaydet';
 
   @override
-  String get expensesTitle => 'Harcamalar';
+  String get expensesTitle => 'Harcamalar ve ödemeler';
 
   @override
-  String get expensesDeleteHint => 'Silmek için harcamaya basılı tut.';
+  String get expensesDeleteHint => 'Silmek için satıra basılı tut.';
 
   @override
   String get noExpenses =>
@@ -342,6 +342,47 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get receiptNoText =>
       'Metin bulunamadı. Daha net bir fotoğrafla tekrar dene.';
+
+  @override
+  String get settleUpTitle => 'Hesaplaşma';
+
+  @override
+  String get settleUpHint => 'Herkesin hesabını en az ödemeyle kapatır.';
+
+  @override
+  String get allSettledUp => 'Herkesin hesabı kapalı.';
+
+  @override
+  String get markAsPaid => 'Ödendi';
+
+  @override
+  String get recordPaymentTitle => 'Ödemeyi kaydet';
+
+  @override
+  String paymentTooHigh(String amount) {
+    return 'Tutar en fazla $amount olabilir.';
+  }
+
+  @override
+  String get saveButton => 'Kaydet';
+
+  @override
+  String get paymentSaved => 'Ödeme kaydedildi.';
+
+  @override
+  String paymentLabel(String date) {
+    return 'Ödeme · $date';
+  }
+
+  @override
+  String get deletePaymentTitle => 'Bu ödeme silinsin mi?';
+
+  @override
+  String get deletePaymentMessage =>
+      'Bakiyeler bu ödemeden önceki haline döner.';
+
+  @override
+  String get paymentDeleted => 'Ödeme silindi.';
 
   @override
   String get offlineShowingSavedData =>

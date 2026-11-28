@@ -48,4 +48,18 @@ void main() {
       expect(formatMoney(-2000), '-20,00 ₺');
     });
   });
+
+  group('formatMoneyForInput', () {
+    test('Has no thousands dots and no lira sign', () {
+      expect(formatMoneyForInput(125050), '1250,50');
+      expect(formatMoneyForInput(1205), '12,05');
+      expect(formatMoneyForInput(99), '0,99');
+    });
+
+    test('parseMoney reads it back', () {
+      for (final amount in [1, 99, 100, 1205, 125050, 123456789]) {
+        expect(parseMoney(formatMoneyForInput(amount)), amount);
+      }
+    });
+  });
 }

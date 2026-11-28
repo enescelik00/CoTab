@@ -13,6 +13,18 @@ Entry format:
 
 ---
 
+## 2026-11-28 — Debt simplification and settle up (Enes Çelik)
+
+- `lib/utils/debt_simplifier.dart`: `simplifyDebts` turns the balances of a group into a short list of suggested payments ("Ayşe pays Ali 100 TL"). The person who owes the most pays the person who gets back the most, until everybody is at 0; for n people there are at most n − 1 payments. The suggestions are calculated on the phone and not saved.
+- Group screen: a new "Settle up" card lists the suggested payments, or "Everybody is settled up." Tapping "Paid" opens a dialog with the suggested amount already filled in; it can be lowered for a part payment, but not raised. Saving it stores a settlement.
+- `SettlementService` (`lib/services/settlement_service.dart`): add, read and soft-delete payments with `SyncService.saveRow`, so they work offline and reach the other members.
+- `calculateBalances` takes the settlements too: a payment raises the payer's balance and lowers the receiver's. The parameter is optional, so the old calls still work.
+- Payments are shown in the expense list, mixed with the expenses by date ("Ayşe → Ali · Payment"). Press and hold to delete one saved by mistake. The section is now called "Expenses and payments".
+- New widgets: `SuggestedPaymentTile`, `SettlementTile` and `SettleUpDialog`. New `formatMoneyForInput` in `money.dart` fills the amount field ("100,00").
+- English and Turkish texts for the new card, dialog and messages.
+- Tests: debt simplification (worked examples, rules that must hold for every group, one case from expenses to payments), balances with settlements (full and part payment, paying all suggestions settles everybody), the payment dialog and `formatMoneyForInput`.
+- Roadmap: marked PR #6, PR #7, the first presentation and this item as done; Phase 2 items are now checkboxes.
+
 ## 2026-11-18 — Fix Android release OCR shrinker rules (Enes Çelik)
 
 - Load app ProGuard rules for release builds and suppress missing-class warnings for the optional non-Latin ML Kit models. Receipt scanning uses only the bundled Latin model.
