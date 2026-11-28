@@ -13,6 +13,14 @@ Entry format:
 
 ---
 
+## 2026-11-28 — Edit expenses (Enes Çelik)
+
+- Tapping an expense on the group screen opens the expense form filled with it ("Edit expense"); pressing and holding still deletes. The add and edit screens are the same file, `AddExpenseScreen`, with an optional `expense`.
+- `ExpenseService.updateExpense` saves the changed expense with the same id. Shares of people who were taken out of the split are soft-deleted, so they no longer count in the balances. `addExpense` and `updateExpense` share one private `_saveExpense`.
+- Only the share amounts are saved, so `percentagesFromShares` (in `split_calculator.dart`) calculates the percentages back for the form.
+- If the payer or someone in the split has left the group, they are shown as "Unknown" in the form, so their share is not dropped and the payer dropdown does not crash. A category that is not in the list falls back to "Other".
+- Tests: `percentagesFromShares` (examples and a check over 1,300+ amount/percentage combinations that editing without changes gives exactly the same shares) and the edit form (filled fields for all three split types, a payer who left the group, an unknown category).
+
 ## 2026-11-28 — Clean up .gitignore (Enes Çelik)
 
 - Removed the rules that were copied from the Flutter SDK's own repository (`/bin/cache/`, `/dev/...`, a bare `version` rule that would hide any file named `version`) and the unused macOS, Windows and Linux sections.

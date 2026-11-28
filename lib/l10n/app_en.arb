@@ -318,7 +318,7 @@
   "@expensesTitle": {
     "description": "Title of the list of expenses and payments on the group screen."
   },
-  "expensesDeleteHint": "Press and hold a row to delete it.",
+  "expensesDeleteHint": "Tap an expense to edit it. Press and hold a row to delete it.",
   "@expensesDeleteHint": {
     "description": "Small hint under the expenses title."
   },
@@ -462,6 +462,18 @@
   "paymentDeleted": "Payment deleted.",
   "@paymentDeleted": {
     "description": "Shown after a payment was deleted."
+  },
+  "editExpenseTitle": "Edit expense",
+  "@editExpenseTitle": {
+    "description": "Title of the expense screen when an existing expense is edited."
+  },
+  "saveChangesButton": "Save changes",
+  "@saveChangesButton": {
+    "description": "Button that saves an edited expense."
+  },
+  "expenseUpdated": "Expense updated.",
+  "@expenseUpdated": {
+    "description": "Shown after an edited expense was saved."
   },
   "offlineShowingSavedData": "You're offline — showing saved data",
   "@offlineShowingSavedData": {

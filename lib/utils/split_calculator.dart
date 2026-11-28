@@ -34,6 +34,22 @@ Map<String, int> splitByPercentage(
   return shares;
 }
 
+// For editing a percentage split. Only the share amounts are saved, not
+// the percentages, so the percentages are calculated back from the shares
+// and rounded to whole numbers: {'ali': 5000, 'ayse': 5000} of 10000 ->
+// {'ali': 50, 'ayse': 50}.
+// For very small amounts the leftover kuruş can change the rounding; then
+// the percentages may not add up to 100 and the user corrects them.
+Map<String, int> percentagesFromShares(int amount, Map<String, int> shares) {
+  final percentages = <String, int>{};
+  for (final userId in shares.keys) {
+    // (x * 100 + amount ~/ 2) ~/ amount rounds x * 100 / amount to the
+    // nearest whole number without using double.
+    percentages[userId] = (shares[userId]! * 100 + amount ~/ 2) ~/ amount;
+  }
+  return percentages;
+}
+
 // For the percentage split: true if the percentages add up to 100.
 bool percentagesAddUpTo100(Map<String, int> percentages) {
   return sumOf(percentages) == 100;

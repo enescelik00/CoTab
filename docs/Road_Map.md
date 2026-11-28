@@ -136,7 +136,7 @@ Beş faz ve üç kapı var: çekirdek sürüm (22 Kasım), özellik dondurma (25
 - [ ] Kalem bazlı bölüştürme arayüzü (Enes Yahya Bodur + Enes Çelik)
 - [x] Borç sadeleştirme algoritması ve birim testleri (Enes Çelik; lib/utils/debt_simplifier.dart)
 - [x] "Ödeme yaptım" akışı: grup ekranında Hesaplaşma kartı, önerilen ödemeler, kısmi ödeme, settlements kaydı ve bakiyeye etkisi (Enes Çelik)
-- [ ] Harcama düzenleme; çekirdek sürümde yalnızca ekleme ve silme var (Enes Çelik)
+- [x] Harcama düzenleme: harcamaya dokununca dolu form açılır, bölüşümden çıkarılanların payları silinir (Enes Çelik)
 - Nöbet çizelgesi, rotasyon ve hatırlatma bildirimleri (Ahmet Anıl Çay)
 - Ortak alışveriş listesi, gerçek zamanlı güncelleme (Ahmet Anıl Çay)
 - QR ile gruba katılma: qr\_flutter ile kod üretme, mobile\_scanner ile okuma (Ahmet Anıl Çay)

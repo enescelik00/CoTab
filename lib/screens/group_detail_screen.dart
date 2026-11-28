@@ -117,6 +117,34 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     }
   }
 
+  // Opens the expense form filled with this expense and its shares.
+  Future<void> _openEditExpense(Expense expense) async {
+    final texts = AppLocalizations.of(context)!;
+    final shares = await ExpenseService.getSharesOfExpense(expense.id);
+    if (!mounted) {
+      return;
+    }
+
+    final saved = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddExpenseScreen(
+          group: widget.group,
+          members: _members,
+          currentUserId: AuthService.currentUserId!,
+          expense: expense,
+          shares: shares,
+        ),
+      ),
+    );
+    if (saved == true) {
+      await _readLocalData();
+      if (mounted) {
+        _showMessage(texts.expenseUpdated);
+      }
+    }
+  }
+
   Future<void> _openAddExpense() async {
     final added = await Navigator.push<bool>(
       context,
@@ -360,6 +388,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
           ExpenseTile(
             expense: expense,
             payerName: _memberName(expense.paidBy),
+            onTap: () => _openEditExpense(expense),
             onLongPress: () => _deleteExpense(expense),
           ),
         );

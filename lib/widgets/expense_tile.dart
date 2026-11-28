@@ -6,16 +6,19 @@ import '../utils/expense_categories.dart';
 import '../utils/money.dart';
 
 // One expense in the list: category icon, title, who paid and when, and
-// the amount on the right. Pressing and holding it calls onLongPress.
+// the amount on the right. Tapping it calls onTap (edit), pressing and
+// holding it calls onLongPress (delete).
 class ExpenseTile extends StatelessWidget {
   final Expense expense;
   final String payerName;
+  final VoidCallback onTap;
   final VoidCallback onLongPress;
 
   const ExpenseTile({
     super.key,
     required this.expense,
     required this.payerName,
+    required this.onTap,
     required this.onLongPress,
   });
 
@@ -39,6 +42,7 @@ class ExpenseTile extends StatelessWidget {
         formatMoney(expense.amount),
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
+      onTap: onTap,
       onLongPress: onLongPress,
     );
   }

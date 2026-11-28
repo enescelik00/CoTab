@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/expense.dart';
+import '../models/expense_share.dart';
 import '../models/group.dart';
 import '../services/expense_service.dart';
 import '../utils/expense_categories.dart';
 import '../utils/money.dart';
 import '../utils/split_calculator.dart';
 
-// Asks for the details of a new expense and how to split it, then saves
-// it. Works offline: the expense is saved on the phone and synced later.
+// Asks for the details of an expense and how to split it, then saves it.
+// The same screen adds a new expense and edits an existing one: when
+// expense is given, the form starts filled with it.
+// Works offline: the expense is saved on the phone and synced later.
 // On success it closes and returns true to the group screen.
 class AddExpenseScreen extends StatefulWidget {
   final Group group;
@@ -17,12 +21,17 @@ class AddExpenseScreen extends StatefulWidget {
   // The signed-in user; chosen as the payer at first. It is a parameter
   // (not read from AuthService here) so tests do not need Firebase.
   final String currentUserId;
+  // Only when editing: the expense and its current shares.
+  final Expense? expense;
+  final List<ExpenseShare> shares;
 
   const AddExpenseScreen({
     super.key,
     required this.group,
     required this.members,
     required this.currentUserId,
+    this.expense,
+    this.shares = const [],
   });
 
   @override
@@ -45,25 +54,96 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final Map<String, TextEditingController> _percentControllers = {};
   final Map<String, TextEditingController> _exactControllers = {};
 
+  // The people shown in the form: the members of the group and, when
+  // editing, also anybody in the expense who is not a member any more.
+  // Without them, saving would silently drop their share.
+  final List<Map<String, Object?>> _formMembers = [];
+
   bool _isSaving = false;
+
+  bool get _isEditing => widget.expense != null;
 
   @override
   void initState() {
     super.initState();
-    for (final member in widget.members) {
+    _formMembers.addAll(widget.members);
+
+    final expense = widget.expense;
+    if (expense != null) {
+      _addMissingPerson(expense.paidBy);
+      for (final share in widget.shares) {
+        _addMissingPerson(share.userId);
+      }
+    }
+
+    for (final member in _formMembers) {
       final userId = member['user_id'] as String;
       _selectedMembers.add(userId);
       _percentControllers[userId] = TextEditingController();
       _exactControllers[userId] = TextEditingController();
     }
 
+    if (expense != null) {
+      _fillFormFrom(expense);
+      return;
+    }
+
     // I paid, unless I am not in the member list for some reason.
-    _paidBy = widget.members.first['user_id'] as String;
-    for (final member in widget.members) {
+    _paidBy = _formMembers.first['user_id'] as String;
+    for (final member in _formMembers) {
       if (member['user_id'] == widget.currentUserId) {
         _paidBy = widget.currentUserId;
       }
     }
+  }
+
+  // Adds a person to the form who is not a member any more. Their name is
+  // not known, so it is shown as "Unknown" (see _nameOf).
+  void _addMissingPerson(String userId) {
+    for (final member in _formMembers) {
+      if (member['user_id'] == userId) {
+        return;
+      }
+    }
+    _formMembers.add({'user_id': userId, 'name': null, 'role': 'member'});
+  }
+
+  // Editing: puts the saved expense and its shares into the form.
+  void _fillFormFrom(Expense expense) {
+    _titleController.text = expense.title;
+    _amountController.text = formatMoneyForInput(expense.amount);
+    _paidBy = expense.paidBy;
+    // A category that is not in the list would crash the dropdown.
+    _category = 'other';
+    if (expenseCategories.contains(expense.category)) {
+      _category = expense.category;
+    }
+    _expenseDate = DateTime.fromMillisecondsSinceEpoch(expense.expenseDate);
+    _splitType = expense.splitType;
+
+    final shares = <String, int>{};
+    for (final share in widget.shares) {
+      shares[share.userId] = share.amount;
+    }
+
+    // The people in the split are ticked; this is also used when the user
+    // switches to the equal split while editing.
+    _selectedMembers.clear();
+    _selectedMembers.addAll(shares.keys);
+
+    final percentages = percentagesFromShares(expense.amount, shares);
+    for (final userId in shares.keys) {
+      _percentControllers[userId]!.text = percentages[userId].toString();
+      _exactControllers[userId]!.text = formatMoneyForInput(shares[userId]!);
+    }
+  }
+
+  String _nameOf(Map<String, Object?> member) {
+    final name = member['name'];
+    if (name == null) {
+      return AppLocalizations.of(context)!.unknownMember;
+    }
+    return name as String;
   }
 
   @override
@@ -97,7 +177,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   // The members who are ticked for the equal split, in list order.
   List<String> _selectedMemberIds() {
     final userIds = <String>[];
-    for (final member in widget.members) {
+    for (final member in _formMembers) {
       final userId = member['user_id'] as String;
       if (_selectedMembers.contains(userId)) {
         userIds.add(userId);
@@ -207,16 +287,29 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     });
 
     try {
-      await ExpenseService.addExpense(
-        groupId: widget.group.id,
-        title: _titleController.text.trim(),
-        amount: amount,
-        paidBy: _paidBy,
-        category: _category,
-        expenseDate: _expenseDate.millisecondsSinceEpoch,
-        splitType: _splitType,
-        shares: shares,
-      );
+      if (_isEditing) {
+        await ExpenseService.updateExpense(
+          widget.expense!,
+          title: _titleController.text.trim(),
+          amount: amount,
+          paidBy: _paidBy,
+          category: _category,
+          expenseDate: _expenseDate.millisecondsSinceEpoch,
+          splitType: _splitType,
+          shares: shares,
+        );
+      } else {
+        await ExpenseService.addExpense(
+          groupId: widget.group.id,
+          title: _titleController.text.trim(),
+          amount: amount,
+          paidBy: _paidBy,
+          category: _category,
+          expenseDate: _expenseDate.millisecondsSinceEpoch,
+          splitType: _splitType,
+          shares: shares,
+        );
+      }
       if (mounted) {
         Navigator.pop(context, true);
       }
@@ -239,7 +332,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final texts = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(texts.addExpenseTitle)),
+      appBar: AppBar(
+        title: Text(
+          _isEditing ? texts.editExpenseTitle : texts.addExpenseTitle,
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -299,7 +396,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text(texts.saveExpenseButton),
+                    : Text(
+                        _isEditing
+                            ? texts.saveChangesButton
+                            : texts.saveExpenseButton,
+                      ),
               ),
             ],
           ),
@@ -310,11 +411,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   Widget _buildPaidByField(AppLocalizations texts) {
     final items = <DropdownMenuItem<String>>[];
-    for (final member in widget.members) {
+    for (final member in _formMembers) {
       items.add(
         DropdownMenuItem(
           value: member['user_id'] as String,
-          child: Text(member['name'] as String),
+          child: Text(_nameOf(member)),
         ),
       );
     }
@@ -409,9 +510,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     }
 
     final rows = <Widget>[];
-    for (final member in widget.members) {
+    for (final member in _formMembers) {
       final userId = member['user_id'] as String;
-      final name = member['name'] as String;
+      final name = _nameOf(member);
 
       if (_splitType == 'equal') {
         String shareText = '';

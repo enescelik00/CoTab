@@ -242,7 +242,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expensesTitle => 'Expenses and payments';
 
   @override
-  String get expensesDeleteHint => 'Press and hold a row to delete it.';
+  String get expensesDeleteHint =>
+      'Tap an expense to edit it. Press and hold a row to delete it.';
 
   @override
   String get noExpenses =>
@@ -382,6 +383,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentDeleted => 'Payment deleted.';
+
+  @override
+  String get editExpenseTitle => 'Edit expense';
+
+  @override
+  String get saveChangesButton => 'Save changes';
+
+  @override
+  String get expenseUpdated => 'Expense updated.';
 
   @override
   String get offlineShowingSavedData => 'You\'re offline — showing saved data';

@@ -551,7 +551,7 @@ abstract class AppLocalizations {
   /// Small hint under the expenses title.
   ///
   /// In en, this message translates to:
-  /// **'Press and hold a row to delete it.'**
+  /// **'Tap an expense to edit it. Press and hold a row to delete it.'**
   String get expensesDeleteHint;
 
   /// Shown on the group screen when the group has no expenses.
@@ -787,6 +787,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Payment deleted.'**
   String get paymentDeleted;
+
+  /// Title of the expense screen when an existing expense is edited.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit expense'**
+  String get editExpenseTitle;
+
+  /// Button that saves an edited expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get saveChangesButton;
+
+  /// Shown after an edited expense was saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense updated.'**
+  String get expenseUpdated;
 
   /// Shown above the group list when the server could not be reached.
   ///

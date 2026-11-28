@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cotab/main.dart';
+import 'package:cotab/models/expense.dart';
+import 'package:cotab/models/expense_share.dart';
 import 'package:cotab/models/group.dart';
 import 'package:cotab/screens/add_expense_screen.dart';
 
@@ -37,6 +39,66 @@ Future<void> openScreen(WidgetTester tester) async {
     ),
   );
   await tester.pumpAndSettle();
+}
+
+Expense makeExpense({
+  String paidBy = 'ali',
+  String splitType = 'equal',
+  String category = 'food',
+}) {
+  return Expense(
+    id: 'e1',
+    groupId: 'group1',
+    title: 'Migros',
+    amount: 10000,
+    paidBy: paidBy,
+    category: category,
+    expenseDate: DateTime(2026, 11, 20).millisecondsSinceEpoch,
+    splitType: splitType,
+    updatedAt: 1763200000000,
+  );
+}
+
+ExpenseShare makeShare(String userId, int amount) {
+  return ExpenseShare(
+    id: ExpenseShare.createId('e1', userId),
+    groupId: 'group1',
+    expenseId: 'e1',
+    userId: userId,
+    amount: amount,
+    updatedAt: 1763200000000,
+  );
+}
+
+Future<void> openEditScreen(
+  WidgetTester tester,
+  Expense expense,
+  List<ExpenseShare> shares,
+) async {
+  tester.view.physicalSize = const Size(800, 2400);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
+
+  await tester.pumpWidget(
+    CoTabApp(
+      home: AddExpenseScreen(
+        group: testGroup,
+        members: testMembers,
+        currentUserId: 'ali',
+        expense: expense,
+        shares: shares,
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
+// The ticked state of the equal split row with this name.
+bool isTicked(WidgetTester tester, String name) {
+  final tile = tester.widget<CheckboxListTile>(
+    find.widgetWithText(CheckboxListTile, name),
+  );
+  return tile.value == true;
 }
 
 void main() {
@@ -85,5 +147,111 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('The percentages must add up to 100.'), findsOneWidget);
+  });
+
+  group('editing', () {
+    testWidgets('The form starts with the saved expense', (tester) async {
+      await openEditScreen(tester, makeExpense(paidBy: 'ayse'), [
+        makeShare('ali', 5000),
+        makeShare('ayse', 5000),
+      ]);
+
+      expect(find.text('Edit expense'), findsOneWidget);
+      expect(find.text('Save changes'), findsOneWidget);
+      expect(find.text('Migros'), findsOneWidget);
+      expect(find.text('100,00'), findsOneWidget);
+      // The payer dropdown shows Ayşe.
+      expect(
+        find.descendant(
+          of: find.byType(DropdownButtonFormField<String>).first,
+          matching: find.text('Ayşe'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Equal split: only the people in the split are ticked', (
+      tester,
+    ) async {
+      await openEditScreen(tester, makeExpense(), [
+        makeShare('ali', 5000),
+        makeShare('ayse', 5000),
+      ]);
+
+      expect(isTicked(tester, 'Ali'), isTrue);
+      expect(isTicked(tester, 'Ayşe'), isTrue);
+      expect(isTicked(tester, 'Mehmet'), isFalse);
+      expect(find.text('50,00 ₺'), findsNWidgets(2));
+    });
+
+    testWidgets('Percentage split: the percentages are filled in', (
+      tester,
+    ) async {
+      await openEditScreen(tester, makeExpense(splitType: 'percentage'), [
+        makeShare('ali', 7000),
+        makeShare('ayse', 3000),
+      ]);
+
+      expect(find.text('70'), findsOneWidget);
+      expect(find.text('30'), findsOneWidget);
+      expect(find.text('Total: 100% of 100%'), findsOneWidget);
+    });
+
+    testWidgets('Exact split: the amounts are filled in', (tester) async {
+      await openEditScreen(tester, makeExpense(splitType: 'exact'), [
+        makeShare('ali', 2550),
+        makeShare('mehmet', 7450),
+      ]);
+
+      expect(find.text('25,50'), findsOneWidget);
+      expect(find.text('74,50'), findsOneWidget);
+      expect(find.text('Total: 100,00 ₺ of 100,00 ₺'), findsOneWidget);
+    });
+
+    testWidgets('Someone who left the group is shown as Unknown', (
+      tester,
+    ) async {
+      // 'zeynep' paid but is not a member any more.
+      await openEditScreen(tester, makeExpense(paidBy: 'zeynep'), [
+        makeShare('ali', 5000),
+        makeShare('zeynep', 5000),
+      ]);
+
+      expect(tester.takeException(), isNull);
+      // Once as the payer and once in the split list.
+      expect(find.text('Unknown'), findsNWidgets(2));
+      expect(isTicked(tester, 'Unknown'), isTrue);
+    });
+
+    testWidgets('A payer who left the group and is not in the split', (
+      tester,
+    ) async {
+      // 'zeynep' paid for Ali and Ayşe only, and is not a member any more.
+      // Without her in the payer list the dropdown would crash.
+      await openEditScreen(tester, makeExpense(paidBy: 'zeynep'), [
+        makeShare('ali', 5000),
+        makeShare('ayse', 5000),
+      ]);
+
+      expect(tester.takeException(), isNull);
+      expect(
+        find.descendant(
+          of: find.byType(DropdownButtonFormField<String>).first,
+          matching: find.text('Unknown'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('A category that is not in the list becomes Other', (
+      tester,
+    ) async {
+      await openEditScreen(tester, makeExpense(category: 'old-category'), [
+        makeShare('ali', 10000),
+      ]);
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('Other'), findsOneWidget);
+    });
   });
 }

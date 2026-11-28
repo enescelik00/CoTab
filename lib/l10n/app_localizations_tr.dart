@@ -244,7 +244,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get expensesTitle => 'Harcamalar ve ödemeler';
 
   @override
-  String get expensesDeleteHint => 'Silmek için satıra basılı tut.';
+  String get expensesDeleteHint =>
+      'Düzenlemek için harcamaya dokun, silmek için satıra basılı tut.';
 
   @override
   String get noExpenses =>
@@ -383,6 +384,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get paymentDeleted => 'Ödeme silindi.';
+
+  @override
+  String get editExpenseTitle => 'Harcamayı düzenle';
+
+  @override
+  String get saveChangesButton => 'Değişiklikleri kaydet';
+
+  @override
+  String get expenseUpdated => 'Harcama güncellendi.';
 
   @override
   String get offlineShowingSavedData =>

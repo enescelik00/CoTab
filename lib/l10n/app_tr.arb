@@ -75,7 +75,7 @@
   "splitErrorExact": "Tutarların toplamı harcama tutarına eşit olmalı.",
   "saveExpenseButton": "Harcamayı kaydet",
   "expensesTitle": "Harcamalar ve ödemeler",
-  "expensesDeleteHint": "Silmek için satıra basılı tut.",
+  "expensesDeleteHint": "Düzenlemek için harcamaya dokun, silmek için satıra basılı tut.",
   "noExpenses": "Henüz harcama yok. İlkini eklemek için \"Harcama ekle\"ye dokun.",
   "expensePaidBy": "{name} ödedi · {date}",
   "unknownMember": "Bilinmeyen",
@@ -115,5 +115,8 @@
   "deletePaymentTitle": "Bu ödeme silinsin mi?",
   "deletePaymentMessage": "Bakiyeler bu ödemeden önceki haline döner.",
   "paymentDeleted": "Ödeme silindi.",
+  "editExpenseTitle": "Harcamayı düzenle",
+  "saveChangesButton": "Değişiklikleri kaydet",
+  "expenseUpdated": "Harcama güncellendi.",
   "offlineShowingSavedData": "Çevrimdışısın — kayıtlı veriler gösteriliyor"
 }

@@ -5,7 +5,7 @@ import '../models/expense_share.dart';
 import 'database_helper.dart';
 import 'sync_service.dart';
 
-// Adding, reading and deleting expenses.
+// Adding, editing, reading and deleting expenses.
 // Everything is saved with SyncService.saveRow, so it works offline and
 // reaches the other members when there is internet.
 // Lists are always read from SQLite.
@@ -36,21 +36,72 @@ class ExpenseService {
       splitType: splitType,
       updatedAt: now,
     );
+    await _saveExpense(expense, shares);
+    return expense;
+  }
+
+  // Saves the changed fields of an existing expense and its new shares.
+  // The id, the group and the receipt image stay the same.
+  static Future<Expense> updateExpense(
+    Expense oldExpense, {
+    required String title,
+    required int amount,
+    required String paidBy,
+    required String category,
+    required int expenseDate,
+    required String splitType,
+    required Map<String, int> shares,
+  }) async {
+    final expense = Expense(
+      id: oldExpense.id,
+      groupId: oldExpense.groupId,
+      title: title,
+      amount: amount,
+      paidBy: paidBy,
+      category: category,
+      expenseDate: expenseDate,
+      splitType: splitType,
+      receiptPath: oldExpense.receiptPath,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    await _saveExpense(expense, shares);
+    return expense;
+  }
+
+  // Used by addExpense and updateExpense: saves the expense row and one
+  // share row for every person in shares. Shares of people who were in the
+  // split before but are not any more are soft-deleted, otherwise they
+  // would still count in the balances.
+  static Future<void> _saveExpense(
+    Expense expense,
+    Map<String, int> shares,
+  ) async {
+    final now = expense.updatedAt;
     await SyncService.saveRow('expenses', expense.toMap());
 
+    final newShareIds = <String>{};
     for (final userId in shares.keys) {
       final share = ExpenseShare(
         id: ExpenseShare.createId(expense.id, userId),
-        groupId: groupId,
+        groupId: expense.groupId,
         expenseId: expense.id,
         userId: userId,
         amount: shares[userId]!,
         updatedAt: now,
       );
       await SyncService.saveRow('expense_shares', share.toMap());
+      newShareIds.add(share.id);
     }
 
-    return expense;
+    final oldShares = await getSharesOfExpense(expense.id);
+    for (final oldShare in oldShares) {
+      if (!newShareIds.contains(oldShare.id)) {
+        final row = oldShare.toMap();
+        row['deleted_at'] = now;
+        row['updated_at'] = now;
+        await SyncService.saveRow('expense_shares', row);
+      }
+    }
   }
 
   // The expenses of a group, newest first.
@@ -68,6 +119,22 @@ class ExpenseService {
       expenses.add(Expense.fromMap(row));
     }
     return expenses;
+  }
+
+  // The active shares of one expense (to fill the form when editing it).
+  static Future<List<ExpenseShare>> getSharesOfExpense(String expenseId) async {
+    final db = await DatabaseHelper.getDatabase();
+    final rows = await db.query(
+      'expense_shares',
+      where: 'expense_id = ? AND deleted_at IS NULL',
+      whereArgs: [expenseId],
+    );
+
+    final shares = <ExpenseShare>[];
+    for (final row in rows) {
+      shares.add(ExpenseShare.fromMap(row));
+    }
+    return shares;
   }
 
   // The shares of all active expenses of a group (for the balances).

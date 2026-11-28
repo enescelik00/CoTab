@@ -75,4 +75,66 @@ void main() {
       expect(sharesMatchAmount(10000, {'ali': 7000, 'ayse': 2999}), isFalse);
     });
   });
+
+  group('percentagesFromShares', () {
+    test('Gives back the percentages of a split', () {
+      final shares = splitByPercentage(
+        20000,
+        {'ali': 50, 'ayse': 30, 'mehmet': 20},
+        'ali',
+      );
+
+      expect(percentagesFromShares(20000, shares), {
+        'ali': 50,
+        'ayse': 30,
+        'mehmet': 20,
+      });
+    });
+
+    test('Works when the payer got the leftover kuruş', () {
+      // 33% of 100,01 TL is 33,0033 TL: the payer gets the extra kuruş.
+      final shares = splitByPercentage(
+        10001,
+        {'ali': 33, 'ayse': 33, 'mehmet': 34},
+        'ayse',
+      );
+
+      expect(percentagesFromShares(10001, shares), {
+        'ali': 33,
+        'ayse': 33,
+        'mehmet': 34,
+      });
+    });
+
+    test('Rounds a share that is not a whole percent', () {
+      // 1/3 of 100 TL is 33,33 %, shown as 33.
+      expect(percentagesFromShares(10000, {'ali': 3333}), {'ali': 33});
+      // 2/3 is 66,67 %, shown as 67.
+      expect(percentagesFromShares(10000, {'ali': 6667}), {'ali': 67});
+    });
+
+    test('Editing without changes gives the same shares again', () {
+      // Many amounts and percentage sets. For amounts of at least 10 TL the
+      // percentages always come back exactly, so saving an edited expense
+      // without changes does not move a single kuruş.
+      final percentageSets = <Map<String, int>>[
+        {'a': 50, 'b': 50},
+        {'a': 33, 'b': 33, 'c': 34},
+        {'a': 1, 'b': 99},
+        {'a': 10, 'b': 20, 'c': 30, 'd': 40},
+        {'a': 17, 'b': 17, 'c': 17, 'd': 17, 'e': 16, 'f': 16},
+        {'a': 100},
+      ];
+      for (int amount = 1000; amount <= 60000; amount += 137) {
+        for (final percentages in percentageSets) {
+          for (final paidBy in ['a', 'b', 'z']) {
+            final shares = splitByPercentage(amount, percentages, paidBy);
+            final back = percentagesFromShares(amount, shares);
+            expect(back, percentages, reason: 'amount $amount, $percentages');
+            expect(splitByPercentage(amount, back, paidBy), shares);
+          }
+        }
+      }
+    });
+  });
 }
