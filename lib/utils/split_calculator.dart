@@ -34,6 +34,37 @@ Map<String, int> splitByPercentage(
   return shares;
 }
 
+// One item of an item split, for example 'Süt 1L', 39,95 TL, had by Ali
+// and Ayşe. id is only set when an item that is already saved is edited.
+class ItemSplit {
+  final String? id;
+  final String name;
+  final int amount; // in kuruş
+  final List<String> userIds;
+
+  ItemSplit({
+    this.id,
+    required this.name,
+    required this.amount,
+    required this.userIds,
+  });
+}
+
+// Item split: every item is split equally between the people who had it,
+// and the payer gets the leftover kuruş of each item. Returns what every
+// person pays in total. userIds of every item must not be empty.
+// Example: Süt 40 TL (Ali, Ayşe) + Ekmek 10 TL (Ali) -> Ali 30, Ayşe 20.
+Map<String, int> splitByItems(List<ItemSplit> items, String paidBy) {
+  final totals = <String, int>{};
+  for (final item in items) {
+    final shares = splitEqually(item.amount, item.userIds, paidBy);
+    for (final userId in shares.keys) {
+      totals[userId] = (totals[userId] ?? 0) + shares[userId]!;
+    }
+  }
+  return totals;
+}
+
 // For editing a percentage split. Only the share amounts are saved, not
 // the percentages, so the percentages are calculated back from the shares
 // and rounded to whole numbers: {'ali': 5000, 'ayse': 5000} of 10000 ->

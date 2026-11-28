@@ -20,9 +20,9 @@ CoTab is a mobile app for student houses and travel groups. It brings shared spe
 ### Extended
 - [ ] **Receipt scanning (OCR):** read the date, total and VAT from Turkish market receipts, then review and correct before saving
   - [x] Initial trial: take or choose a receipt photo, preview it, and display raw OCR text in image reading order
-- [ ] **Item-level splitting:** assign each item on a receipt to one or more people
+- [x] **Item-level splitting:** assign each item on a receipt to one or more people (items are typed in for now; filling them from a scanned receipt comes with receipt parsing)
 - [ ] **QR invites:** join a group by scanning a QR code
-- [ ] **Debt simplification:** settle up with the minimum number of payments
+- [x] **Debt simplification:** settle up with the minimum number of payments, and record "I paid"
 - [ ] **Chore schedule:** rotating duties with reminder notifications
 - [ ] **Shared shopping list:** a bought item turns into an expense with one tap
 

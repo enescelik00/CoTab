@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/expense.dart';
+import '../models/expense_item.dart';
 import '../models/expense_share.dart';
 import '../models/group.dart';
 import '../services/expense_service.dart';
 import '../utils/expense_categories.dart';
 import '../utils/money.dart';
 import '../utils/split_calculator.dart';
+import '../widgets/item_split_card.dart';
 
 // Asks for the details of an expense and how to split it, then saves it.
 // The same screen adds a new expense and edits an existing one: when
@@ -24,6 +26,10 @@ class AddExpenseScreen extends StatefulWidget {
   // Only when editing: the expense and its current shares.
   final Expense? expense;
   final List<ExpenseShare> shares;
+  // The receipt items. When editing an item split, these are its saved
+  // items. For a new expense (for example from a scanned receipt), they
+  // start the form in the item split; their ids are not used.
+  final List<ExpenseItem> items;
 
   const AddExpenseScreen({
     super.key,
@@ -32,6 +38,7 @@ class AddExpenseScreen extends StatefulWidget {
     required this.currentUserId,
     this.expense,
     this.shares = const [],
+    this.items = const [],
   });
 
   @override
@@ -46,13 +53,16 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   late String _paidBy;
   String _category = 'food';
   DateTime _expenseDate = DateTime.now();
-  String _splitType = 'equal'; // 'equal', 'percentage' or 'exact'
+  // 'equal', 'percentage', 'exact' or 'items'
+  String _splitType = 'equal';
 
   // Equal split: the members who share the expense (everybody at first).
   final Set<String> _selectedMembers = {};
   // Percentage and exact split: one text field for every member.
   final Map<String, TextEditingController> _percentControllers = {};
   final Map<String, TextEditingController> _exactControllers = {};
+  // Item split: one draft for every receipt item.
+  final List<ItemDraft> _itemDrafts = [];
 
   // The people shown in the form: the members of the group and, when
   // editing, also anybody in the expense who is not a member any more.
@@ -88,6 +98,21 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       return;
     }
 
+    // A new expense with items, for example from a scanned receipt. Like
+    // "Add item", every item is shared by everybody at first.
+    if (widget.items.isNotEmpty) {
+      _splitType = 'items';
+      for (final item in widget.items) {
+        _itemDrafts.add(
+          ItemDraft(
+            name: item.name,
+            amount: formatMoneyForInput(item.amount),
+            userIds: Set<String>.from(_selectedMembers),
+          ),
+        );
+      }
+    }
+
     // I paid, unless I am not in the member list for some reason.
     _paidBy = _formMembers.first['user_id'] as String;
     for (final member in _formMembers) {
@@ -121,9 +146,28 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     _expenseDate = DateTime.fromMillisecondsSinceEpoch(expense.expenseDate);
     _splitType = expense.splitType;
 
+    // What every person pays in total. For an item split a person has one
+    // share per item, so they are added up.
     final shares = <String, int>{};
     for (final share in widget.shares) {
-      shares[share.userId] = share.amount;
+      shares[share.userId] = (shares[share.userId] ?? 0) + share.amount;
+    }
+
+    for (final item in widget.items) {
+      final userIds = <String>{};
+      for (final share in widget.shares) {
+        if (share.itemId == item.id) {
+          userIds.add(share.userId);
+        }
+      }
+      _itemDrafts.add(
+        ItemDraft(
+          id: item.id,
+          name: item.name,
+          amount: formatMoneyForInput(item.amount),
+          userIds: userIds,
+        ),
+      );
     }
 
     // The people in the split are ticked; this is also used when the user
@@ -155,6 +199,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     }
     for (final controller in _exactControllers.values) {
       controller.dispose();
+    }
+    for (final draft in _itemDrafts) {
+      draft.dispose();
     }
     super.dispose();
   }
@@ -226,6 +273,53 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     return amounts;
   }
 
+  // Item split: reads the item cards. Shows a message and returns null if
+  // an item is not complete or the items do not add up to the amount.
+  // The people of every item are in the order of the form.
+  List<ItemSplit>? _readItems(AppLocalizations texts, int amount) {
+    if (_itemDrafts.isEmpty) {
+      _showMessage(texts.splitErrorNoItems);
+      return null;
+    }
+
+    final items = <ItemSplit>[];
+    int total = 0;
+    for (final draft in _itemDrafts) {
+      final name = draft.nameController.text.trim();
+      final itemAmount = parseMoney(draft.amountController.text);
+      final userIds = <String>[];
+      for (final member in _formMembers) {
+        final userId = member['user_id'] as String;
+        if (draft.userIds.contains(userId)) {
+          userIds.add(userId);
+        }
+      }
+
+      if (name.isEmpty ||
+          itemAmount == null ||
+          itemAmount <= 0 ||
+          userIds.isEmpty) {
+        _showMessage(texts.splitErrorItem);
+        return null;
+      }
+      items.add(
+        ItemSplit(
+          id: draft.id,
+          name: name,
+          amount: itemAmount,
+          userIds: userIds,
+        ),
+      );
+      total += itemAmount;
+    }
+
+    if (total != amount) {
+      _showMessage(texts.splitErrorItemsTotal);
+      return null;
+    }
+    return items;
+  }
+
   // Builds the share of every person from what the user chose.
   // Shows a message and returns null if the split is not right.
   Map<String, int>? _buildShares(AppLocalizations texts, int amount) {
@@ -277,9 +371,22 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       return;
     }
     final amount = _typedAmount()!;
-    final shares = _buildShares(texts, amount);
-    if (shares == null) {
-      return;
+
+    // An item split saves items; every other split saves shares.
+    Map<String, int> shares = {};
+    List<ItemSplit> items = [];
+    if (_splitType == 'items') {
+      final readItems = _readItems(texts, amount);
+      if (readItems == null) {
+        return;
+      }
+      items = readItems;
+    } else {
+      final builtShares = _buildShares(texts, amount);
+      if (builtShares == null) {
+        return;
+      }
+      shares = builtShares;
     }
 
     setState(() {
@@ -297,6 +404,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           expenseDate: _expenseDate.millisecondsSinceEpoch,
           splitType: _splitType,
           shares: shares,
+          items: items,
         );
       } else {
         await ExpenseService.addExpense(
@@ -308,6 +416,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           expenseDate: _expenseDate.millisecondsSinceEpoch,
           splitType: _splitType,
           shares: shares,
+          items: items,
         );
       }
       if (mounted) {
@@ -385,8 +494,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               const SizedBox(height: 8),
               _buildSplitTypeButtons(texts),
               const SizedBox(height: 8),
-              ..._buildMemberRows(),
+              if (_splitType == 'items')
+                ..._buildItemRows(texts)
+              else
+                ..._buildMemberRows(),
               _buildSplitTotal(texts),
+              if (_splitType == 'items') _buildItemsPerPerson(texts),
               const SizedBox(height: 24),
               FilledButton(
                 onPressed: _isSaving ? null : _save,
@@ -489,7 +602,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         ButtonSegment(value: 'equal', label: Text(texts.splitEqual)),
         ButtonSegment(value: 'percentage', label: Text(texts.splitPercentage)),
         ButtonSegment(value: 'exact', label: Text(texts.splitExact)),
+        ButtonSegment(value: 'items', label: Text(texts.splitItems)),
       ],
+      // Four segments: no check mark, so the labels fit on a phone.
+      showSelectedIcon: false,
       selected: {_splitType},
       onSelectionChanged: (selection) {
         setState(() {
@@ -610,6 +726,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       }
       text = texts.splitPercentTotal(total);
       isRight = total == 100;
+    } else if (_splitType == 'items') {
+      int total = 0;
+      for (final draft in _itemDrafts) {
+        total += parseMoney(draft.amountController.text) ?? 0;
+      }
+      final amount = _typedAmount() ?? 0;
+      text = texts.splitExactTotal(formatMoney(total), formatMoney(amount));
+      isRight = amount > 0 && total == amount;
     } else {
       int total = 0;
       for (final controller in _exactControllers.values) {
@@ -626,6 +750,125 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         text,
         textAlign: TextAlign.end,
         style: TextStyle(color: isRight ? colors.primary : colors.error),
+      ),
+    );
+  }
+
+  // The people for the item chips, with their names ready to show.
+  List<Map<String, String>> _peopleForChips() {
+    final people = <Map<String, String>>[];
+    for (final member in _formMembers) {
+      people.add({
+        'user_id': member['user_id'] as String,
+        'name': _nameOf(member),
+      });
+    }
+    return people;
+  }
+
+  // Item split: one card for every item and a button to add one more.
+  List<Widget> _buildItemRows(AppLocalizations texts) {
+    final people = _peopleForChips();
+    final rows = <Widget>[];
+    for (final draft in _itemDrafts) {
+      rows.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: ItemSplitCard(
+            // The key keeps every card with its own draft when one above it
+            // is removed.
+            key: ObjectKey(draft),
+            draft: draft,
+            people: people,
+            onChanged: () => setState(() {}),
+            onRemove: () {
+              setState(() {
+                _itemDrafts.remove(draft);
+              });
+              // The card's text fields are taken off the screen in the next
+              // build. Their controllers are freed only after that, so the
+              // fields never hold a controller that is already freed.
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                draft.dispose();
+              });
+            },
+          ),
+        ),
+      );
+    }
+
+    rows.add(
+      Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: OutlinedButton.icon(
+          onPressed: () {
+            setState(() {
+              // A new item is shared by everybody at first.
+              final everybody = <String>{};
+              for (final person in people) {
+                everybody.add(person['user_id']!);
+              }
+              _itemDrafts.add(ItemDraft(userIds: everybody));
+            });
+          },
+          icon: const Icon(Icons.add),
+          label: Text(texts.addItemButton),
+        ),
+      ),
+    );
+    return rows;
+  }
+
+  // Item split: what every person pays in total, for the items that are
+  // complete so far (an amount and at least one person).
+  Widget _buildItemsPerPerson(AppLocalizations texts) {
+    final items = <ItemSplit>[];
+    for (final draft in _itemDrafts) {
+      final amount = parseMoney(draft.amountController.text);
+      if (amount == null || amount <= 0 || draft.userIds.isEmpty) {
+        continue;
+      }
+      final userIds = <String>[];
+      for (final member in _formMembers) {
+        final userId = member['user_id'] as String;
+        if (draft.userIds.contains(userId)) {
+          userIds.add(userId);
+        }
+      }
+      items.add(ItemSplit(name: '', amount: amount, userIds: userIds));
+    }
+    if (items.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final totals = splitByItems(items, _paidBy);
+    final rows = <Widget>[];
+    for (final member in _formMembers) {
+      final userId = member['user_id'] as String;
+      if (!totals.containsKey(userId)) {
+        continue;
+      }
+      rows.add(
+        ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          title: Text(_nameOf(member)),
+          trailing: Text(formatMoney(totals[userId]!)),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            texts.itemsPerPerson,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          ...rows,
+        ],
       ),
     );
   }

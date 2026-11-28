@@ -806,6 +806,60 @@ abstract class AppLocalizations {
   /// **'Expense updated.'**
   String get expenseUpdated;
 
+  /// Split type: every receipt item is split between the people who had it.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get splitItems;
+
+  /// Button that adds a receipt item in the item split.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get addItemButton;
+
+  /// Label of the item name field, e.g. 'Süt 1L'.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get itemNameLabel;
+
+  /// Tooltip of the button that removes an item.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove item'**
+  String get removeItemTooltip;
+
+  /// Label above the people chips of an item.
+  ///
+  /// In en, this message translates to:
+  /// **'Who had it?'**
+  String get itemWhoHadIt;
+
+  /// Title above what every person pays in the item split.
+  ///
+  /// In en, this message translates to:
+  /// **'Per person'**
+  String get itemsPerPerson;
+
+  /// Shown when the item split has no items.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one item.'**
+  String get splitErrorNoItems;
+
+  /// Shown when an item is not complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Every item needs a name, an amount and at least one person.'**
+  String get splitErrorItem;
+
+  /// Shown when the items do not add up to the expense amount.
+  ///
+  /// In en, this message translates to:
+  /// **'The items must add up to the total.'**
+  String get splitErrorItemsTotal;
+
   /// Shown above the group list when the server could not be reached.
   ///
   /// In en, this message translates to:

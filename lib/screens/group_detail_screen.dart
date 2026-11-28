@@ -121,6 +121,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   Future<void> _openEditExpense(Expense expense) async {
     final texts = AppLocalizations.of(context)!;
     final shares = await ExpenseService.getSharesOfExpense(expense.id);
+    final items = await ExpenseService.getItemsOfExpense(expense.id);
     if (!mounted) {
       return;
     }
@@ -134,6 +135,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
           currentUserId: AuthService.currentUserId!,
           expense: expense,
           shares: shares,
+          items: items,
         ),
       ),
     );

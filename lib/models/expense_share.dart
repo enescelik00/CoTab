@@ -27,6 +27,11 @@ class ExpenseShare {
     return '${expenseId}_$userId';
   }
 
+  // The same for a share of one receipt item: one share per item and user.
+  static String createItemShareId(String itemId, String userId) {
+    return '${itemId}_$userId';
+  }
+
   // Converts the share to a map for the SQLite `expense_shares` table.
   // The Firestore document uses the same map.
   Map<String, dynamic> toMap() {

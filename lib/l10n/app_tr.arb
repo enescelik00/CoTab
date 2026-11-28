@@ -118,5 +118,14 @@
   "editExpenseTitle": "Harcamayı düzenle",
   "saveChangesButton": "Değişiklikleri kaydet",
   "expenseUpdated": "Harcama güncellendi.",
+  "splitItems": "Kalem",
+  "addItemButton": "Kalem ekle",
+  "itemNameLabel": "Ürün",
+  "removeItemTooltip": "Kalemi sil",
+  "itemWhoHadIt": "Kimler aldı?",
+  "itemsPerPerson": "Kişi başı",
+  "splitErrorNoItems": "En az bir kalem ekle.",
+  "splitErrorItem": "Her kalemin adı, tutarı ve en az bir kişisi olmalı.",
+  "splitErrorItemsTotal": "Kalemlerin toplamı harcama tutarına eşit olmalı.",
   "offlineShowingSavedData": "Çevrimdışısın — kayıtlı veriler gösteriliyor"
 }

@@ -395,6 +395,35 @@ class AppLocalizationsTr extends AppLocalizations {
   String get expenseUpdated => 'Harcama güncellendi.';
 
   @override
+  String get splitItems => 'Kalem';
+
+  @override
+  String get addItemButton => 'Kalem ekle';
+
+  @override
+  String get itemNameLabel => 'Ürün';
+
+  @override
+  String get removeItemTooltip => 'Kalemi sil';
+
+  @override
+  String get itemWhoHadIt => 'Kimler aldı?';
+
+  @override
+  String get itemsPerPerson => 'Kişi başı';
+
+  @override
+  String get splitErrorNoItems => 'En az bir kalem ekle.';
+
+  @override
+  String get splitErrorItem =>
+      'Her kalemin adı, tutarı ve en az bir kişisi olmalı.';
+
+  @override
+  String get splitErrorItemsTotal =>
+      'Kalemlerin toplamı harcama tutarına eşit olmalı.';
+
+  @override
   String get offlineShowingSavedData =>
       'Çevrimdışısın — kayıtlı veriler gösteriliyor';
 }

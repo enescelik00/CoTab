@@ -133,7 +133,8 @@ Beş faz ve üç kapı var: çekirdek sürüm (22 Kasım), özellik dondurma (25
 ### Faz 2 — Ek modüller (23 Kasım–11 Aralık)
 
 - Fiş ayrıştırma (toplam, tarih, kalemler) ve düzenlenebilir onay ekranı (Enes Yahya Bodur)
-- [ ] Kalem bazlı bölüştürme arayüzü (Enes Yahya Bodur + Enes Çelik)
+- [x] Kalem bazlı bölüştürme arayüzü: harcama formunda "Kalem" bölüştürmesi, her kalem onu alanlar arasında eşit bölünür, düzenlenebilir (Enes Çelik)
+- [ ] Fişten okunan kalemlerin forma aktarılması: ayrıştırılan kalemler AddExpenseScreen(items: ...) ile verilince form Kalem bölüştürmesinde dolu açılır (Enes Yahya Bodur)
 - [x] Borç sadeleştirme algoritması ve birim testleri (Enes Çelik; lib/utils/debt_simplifier.dart)
 - [x] "Ödeme yaptım" akışı: grup ekranında Hesaplaşma kartı, önerilen ödemeler, kısmi ödeme, settlements kaydı ve bakiyeye etkisi (Enes Çelik)
 - [x] Harcama düzenleme: harcamaya dokununca dolu form açılır, bölüşümden çıkarılanların payları silinir (Enes Çelik)

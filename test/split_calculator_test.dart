@@ -78,11 +78,11 @@ void main() {
 
   group('percentagesFromShares', () {
     test('Gives back the percentages of a split', () {
-      final shares = splitByPercentage(
-        20000,
-        {'ali': 50, 'ayse': 30, 'mehmet': 20},
-        'ali',
-      );
+      final shares = splitByPercentage(20000, {
+        'ali': 50,
+        'ayse': 30,
+        'mehmet': 20,
+      }, 'ali');
 
       expect(percentagesFromShares(20000, shares), {
         'ali': 50,
@@ -93,11 +93,11 @@ void main() {
 
     test('Works when the payer got the leftover kuruş', () {
       // 33% of 100,01 TL is 33,0033 TL: the payer gets the extra kuruş.
-      final shares = splitByPercentage(
-        10001,
-        {'ali': 33, 'ayse': 33, 'mehmet': 34},
-        'ayse',
-      );
+      final shares = splitByPercentage(10001, {
+        'ali': 33,
+        'ayse': 33,
+        'mehmet': 34,
+      }, 'ayse');
 
       expect(percentagesFromShares(10001, shares), {
         'ali': 33,
@@ -134,6 +134,65 @@ void main() {
             expect(splitByPercentage(amount, back, paidBy), shares);
           }
         }
+      }
+    });
+  });
+
+  group('splitByItems', () {
+    test('Every item is split between the people who had it', () {
+      // Süt 40 TL for Ali and Ayşe, Ekmek 10 TL only for Ali.
+      final totals = splitByItems([
+        ItemSplit(name: 'Süt', amount: 4000, userIds: ['ali', 'ayse']),
+        ItemSplit(name: 'Ekmek', amount: 1000, userIds: ['ali']),
+      ], 'ayse');
+
+      expect(totals, {'ali': 3000, 'ayse': 2000});
+    });
+
+    test('The payer gets the leftover kuruş of every item', () {
+      // 10 TL between three people: 3,34 + 3,33 + 3,33, twice.
+      final items = [
+        ItemSplit(name: 'A', amount: 1000, userIds: ['ali', 'ayse', 'mehmet']),
+        ItemSplit(name: 'B', amount: 1000, userIds: ['ali', 'ayse', 'mehmet']),
+      ];
+
+      expect(splitByItems(items, 'mehmet'), {
+        'ali': 666,
+        'ayse': 666,
+        'mehmet': 668,
+      });
+    });
+
+    test('Someone in no item pays nothing', () {
+      final totals = splitByItems([
+        ItemSplit(name: 'Çay', amount: 2500, userIds: ['ayse']),
+      ], 'ali');
+
+      expect(totals, {'ayse': 2500});
+    });
+
+    test('The totals always add up to the sum of the items', () {
+      final people = ['a', 'b', 'c', 'd'];
+      for (int seed = 1; seed <= 200; seed++) {
+        // Different items with different people, made from the seed.
+        final items = <ItemSplit>[];
+        int sum = 0;
+        for (int i = 0; i < 1 + seed % 5; i++) {
+          final amount = (seed * 37 + i * 101) % 9000 + 1;
+          final userIds = <String>[];
+          for (int p = 0; p < people.length; p++) {
+            if ((seed + i + p) % 3 != 0) {
+              userIds.add(people[p]);
+            }
+          }
+          if (userIds.isEmpty) {
+            userIds.add('a');
+          }
+          items.add(ItemSplit(name: 'x', amount: amount, userIds: userIds));
+          sum += amount;
+        }
+
+        expect(sumOf(splitByItems(items, people[seed % 4])), sum);
       }
     });
   });

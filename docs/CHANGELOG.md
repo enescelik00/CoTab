@@ -13,6 +13,17 @@ Entry format:
 
 ---
 
+## 2026-11-28 — Item split (Enes Çelik)
+
+- New split type "Items" in the expense form: add receipt items (name and amount), choose who had each item with chips, and every item is split equally between those people (the payer gets the leftover kuruş of each item). A "Per person" list shows what everybody pays, and the total turns green when the items add up to the expense amount.
+- Saving checks that there is at least one item, that every item has a name, an amount and at least one person, and that the items add up to the total.
+- Items are saved in `expense_items`, and every item and person gets a share in `expense_shares` with `item_id` set (id `itemId_userId`). No database change was needed; both tables exist since version 3.
+- Editing an item split fills the item cards again. Removing an item or switching to another split type soft-deletes the old items and their shares. Deleting an expense now also soft-deletes its items.
+- For receipt scanning (Enes Yahya Bodur): `AddExpenseScreen(items: [...])` with the parsed items opens the form in the item split with the items filled in and shared by everybody at first. The item ids are not used for a new expense.
+- New `ItemSplit` and `splitByItems` in `split_calculator.dart`, new widget `ItemSplitCard` (with `ItemDraft`) in `lib/widgets/item_split_card.dart`, `ExpenseShare.createItemShareId`, `ExpenseService.getItemsOfExpense`.
+- English and Turkish texts for the item split.
+- Tests: `splitByItems` (examples and a check over 200 generated receipts that the totals always add up) and the item split form (cards, chips, per person totals, the three error messages, removing an item, editing, items of a new expense).
+
 ## 2026-11-28 — Edit expenses (Enes Çelik)
 
 - Tapping an expense on the group screen opens the expense form filled with it ("Edit expense"); pressing and holding still deletes. The add and edit screens are the same file, `AddExpenseScreen`, with an optional `expense`.

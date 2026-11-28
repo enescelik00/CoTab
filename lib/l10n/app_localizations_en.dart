@@ -394,5 +394,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expenseUpdated => 'Expense updated.';
 
   @override
+  String get splitItems => 'Items';
+
+  @override
+  String get addItemButton => 'Add item';
+
+  @override
+  String get itemNameLabel => 'Item';
+
+  @override
+  String get removeItemTooltip => 'Remove item';
+
+  @override
+  String get itemWhoHadIt => 'Who had it?';
+
+  @override
+  String get itemsPerPerson => 'Per person';
+
+  @override
+  String get splitErrorNoItems => 'Add at least one item.';
+
+  @override
+  String get splitErrorItem =>
+      'Every item needs a name, an amount and at least one person.';
+
+  @override
+  String get splitErrorItemsTotal => 'The items must add up to the total.';
+
+  @override
   String get offlineShowingSavedData => 'You\'re offline — showing saved data';
 }

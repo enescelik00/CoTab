@@ -475,6 +475,42 @@
   "@expenseUpdated": {
     "description": "Shown after an edited expense was saved."
   },
+  "splitItems": "Items",
+  "@splitItems": {
+    "description": "Split type: every receipt item is split between the people who had it."
+  },
+  "addItemButton": "Add item",
+  "@addItemButton": {
+    "description": "Button that adds a receipt item in the item split."
+  },
+  "itemNameLabel": "Item",
+  "@itemNameLabel": {
+    "description": "Label of the item name field, e.g. 'Süt 1L'."
+  },
+  "removeItemTooltip": "Remove item",
+  "@removeItemTooltip": {
+    "description": "Tooltip of the button that removes an item."
+  },
+  "itemWhoHadIt": "Who had it?",
+  "@itemWhoHadIt": {
+    "description": "Label above the people chips of an item."
+  },
+  "itemsPerPerson": "Per person",
+  "@itemsPerPerson": {
+    "description": "Title above what every person pays in the item split."
+  },
+  "splitErrorNoItems": "Add at least one item.",
+  "@splitErrorNoItems": {
+    "description": "Shown when the item split has no items."
+  },
+  "splitErrorItem": "Every item needs a name, an amount and at least one person.",
+  "@splitErrorItem": {
+    "description": "Shown when an item is not complete."
+  },
+  "splitErrorItemsTotal": "The items must add up to the total.",
+  "@splitErrorItemsTotal": {
+    "description": "Shown when the items do not add up to the expense amount."
+  },
   "offlineShowingSavedData": "You're offline — showing saved data",
   "@offlineShowingSavedData": {
     "description": "Shown above the group list when the server could not be reached."
